@@ -21,7 +21,7 @@
 
 .dashboard-container {
   padding: 20px;
-  max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   transition: var(--transition);
 }
@@ -62,7 +62,7 @@
 .premium-loading-content {
   text-align: center;
   padding: 60px 20px;
-  max-width: 400px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -110,7 +110,7 @@
 
 .progress-container {
   width: 100%;
-  max-width: 300px;
+  max-width: 400px;
   margin: 0 auto;
   animation: progressFadeIn 0.8s ease-out 0.4s both;
 }
