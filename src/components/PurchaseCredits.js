@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { supabaseClient } from '../supabaseClient';
+import { supabase } from '../supabase';
 import './PurchaseCredits.css';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
@@ -16,7 +16,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
 
   const fetchPlans = async () => {
     try {
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from('payment_plans')
         .select('*')
         .eq('is_active', true)

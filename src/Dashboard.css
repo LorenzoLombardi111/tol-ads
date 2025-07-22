@@ -448,3 +448,31 @@ ad-info {
     grid-template-columns: 1fr;
   }
 } 
+/* Credits Section Styles */
+
+.credits-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--color-main);
+  border: 2px solid var(--color-dark-blue);
+  border-radius: 8px;
+}
+
+.purchase-credits-btn {
+  background: var(--color-terra);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.purchase-credits-btn:hover {
+  background: #e0744c;
+}

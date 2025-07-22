@@ -244,33 +244,8 @@ function App() {
     }
   };
 
-  // Generate ads with email - UPDATED to save to Supabase with credit check
+  // Generate ads with email - UPDATED to save to Supabase
   const generateAds = async () => {
-    // Check if user has enough credits
-    try {
-      const { data: userCredits, error: creditsError } = await supabase
-        .from('user_credits')
-        .select('credits_available')
-        .eq('user_id', userData.id)
-        .single();
-
-      if (creditsError) {
-        console.error('Error checking credits:', creditsError);
-        setError('Unable to check your credits. Please try again.');
-        return;
-      }
-
-      const availableCredits = userCredits?.credits_available || 0;
-      if (availableCredits < 1) {
-        setError('You don\'t have enough credits to generate ads. Please purchase more credits.');
-        return;
-      }
-    } catch (error) {
-      console.error('Error checking credits:', error);
-      setError('Unable to verify your credits. Please try again.');
-      return;
-    }
-
     // Validate all inputs
     if (!productImage || !inspirationImage) {
       setError('Please upload both images first!');
@@ -323,23 +298,6 @@ function App() {
         timeout: 30000
       });
 
-      // Success!
-      setSubmitted(true);
-      setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes.`);
-      
-    } catch (error) {
-      console.error('Error:', error);
-      if (error.response) {
-        setError(`Server error: ${error.response.status}. Please try again.`);
-      } else if (error.request) {
-        setError('No response from server. Check your connection and try again.');
-      } else {
-        setError('Something went wrong. Please try again.');
-      }
-    }
-    
-    setLoading(false);
-  };
       // Success!
       setSubmitted(true);
                   setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes.`);

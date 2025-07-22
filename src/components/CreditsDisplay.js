@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabaseClient } from '../supabaseClient';
+import { supabase } from '../supabase';
 import './CreditsDisplay.css';
 
 const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
@@ -18,7 +18,7 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabaseClient
+      const { data, error } = await supabase
         .from('user_credits')
         .select('credits_available')
         .eq('user_id', userId)
