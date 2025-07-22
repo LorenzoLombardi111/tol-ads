@@ -43,7 +43,7 @@
   height: 40px;
   margin: 0 auto 20px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #4CAF50;
+  border-top: 4px solid #F0855A;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -87,7 +87,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #F0855A;
 }
 
 .filter-buttons {
@@ -106,7 +106,7 @@
 }
 
 .filter-select:hover {
-  border-color: #4CAF50;
+  border-color: #F0855A;
 }
 
 /* Stats Cards */
@@ -191,8 +191,8 @@
 }
 
 .status-completed {
-  background-color: #e8f5e9;
-  color: #2e7d32;
+  background-color: rgba(240, 133, 90, 0.2);
+  color: #080727;
 }
 
 .status-pending {
@@ -277,7 +277,7 @@ ad-info {
 .view-results-btn {
   width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
+  background-color: #F0855A;
   color: white;
   border: none;
   border-radius: 8px;
@@ -288,7 +288,7 @@ ad-info {
 }
 
 .view-results-btn:hover {
-  background-color: #45a049;
+  background-color: #e0744a;
   transform: translateY(-1px);
 }
 

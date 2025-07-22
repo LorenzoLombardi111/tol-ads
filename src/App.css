@@ -13,7 +13,7 @@
 h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
-  background: linear-gradient(45deg, #4CAF50, #2196F3);
+  background: linear-gradient(45deg, #F0855A, #080727);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -80,16 +80,16 @@ h1 {
 }
 
 .upload-box:hover {
-  border-color: #4CAF50;
+  border-color: #F0855A;
   background-color: #f5f5f5;
   transform: translateY(-2px);
 }
 
 .upload-box.drag-active {
-  border-color: #4CAF50;
-  background-color: #e8f5e9;
+  border-color: #F0855A;
+  background-color: rgba(240, 133, 90, 0.1);
   transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+  box-shadow: 0 8px 20px rgba(240, 133, 90, 0.2);
 }
 
 .upload-box h3 {
@@ -105,7 +105,7 @@ h1 {
 }
 
 .upload-box.drag-active .upload-icon {
-  color: #4CAF50;
+  color: #F0855A;
   animation: bounce 0.5s ease;
 }
 
@@ -134,7 +134,7 @@ h1 {
 .file-label {
   display: inline-block;
   padding: 10px 25px;
-  background-color: #4CAF50;
+  background-color: #F0855A;
   color: white;
   border-radius: 25px;
   cursor: pointer;
@@ -143,9 +143,9 @@ h1 {
 }
 
 .file-label:hover {
-  background-color: #45a049;
+  background-color: #e0744a;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 10px rgba(240, 133, 90, 0.3);
 }
 
 /* Preview Styles */
@@ -202,7 +202,7 @@ h1 {
 }
 
 .generate-button {
-  background: linear-gradient(45deg, #4CAF50, #45a049);
+  background: linear-gradient(45deg, #F0855A, #e0744a);
   color: white;
   padding: 15px 35px;
   font-size: 18px;
@@ -214,12 +214,12 @@ h1 {
   align-items: center;
   gap: 10px;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 15px rgba(240, 133, 90, 0.3);
 }
 
 .generate-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 20px rgba(240, 133, 90, 0.4);
 }
 
 .generate-button:disabled {
@@ -391,8 +391,8 @@ h1 {
 }
 
 .email-container:hover {
-  border-color: #4CAF50;
-  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.1);
+  border-color: #F0855A;
+  box-shadow: 0 5px 15px rgba(240, 133, 90, 0.1);
 }
 
 .email-container h3 {
@@ -424,8 +424,8 @@ h1 {
 
 .email-input:focus {
   outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  border-color: #F0855A;
+  box-shadow: 0 0 0 3px rgba(240, 133, 90, 0.1);
 }
 
 .email-input.error {
@@ -460,7 +460,7 @@ h1 {
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: #4CAF50;
+  accent-color: #F0855A;
 }
 
 .remember-checkbox:hover {
@@ -470,11 +470,11 @@ h1 {
 /* Success State - Email Display */
 .email-display {
   font-size: 1.3em;
-  color: #4CAF50;
+  color: #F0855A;
   font-weight: 600;
   margin: 10px 0 20px 0;
   padding: 10px 20px;
-  background-color: #e8f5e9;
+  background-color: rgba(240, 133, 90, 0.1);
   border-radius: 10px;
   display: inline-block;
 }
@@ -484,6 +484,34 @@ h1 {
   .email-container {
     width: 90%;
   }
+}
+
+/* Navigation Tabs */
+.navigation-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  background: #f8f9fa;
+  padding: 10px 20px;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+.nav-tab {
+  padding: 12px 30px;
+  border: none;
+  background: none;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #080727;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-tab.active, .nav-tab:hover {
+  background: #F0855A;
+  color: #FFFFFF;
 }
 
 /* User Header */
