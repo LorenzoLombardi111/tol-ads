@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from '../Logo';
 import './LandingPage.css';
 
-const LandingPage = ({ onSignUp, onLogin, isAuthenticated, onGoToDashboard }) => {
+const LandingPage = () => {
   return (
     <div className="landing-page">
       {/* Navigation */}
@@ -10,20 +10,12 @@ const LandingPage = ({ onSignUp, onLogin, isAuthenticated, onGoToDashboard }) =>
         <div className="nav-container">
           <Logo size="medium" showText={true} />
           <div className="nav-buttons">
-            {isAuthenticated ? (
-              <button onClick={onGoToDashboard} className="nav-btn signup-btn">
-                Go to Dashboard
-              </button>
-            ) : (
-              <>
-                <button onClick={onLogin} className="nav-btn login-btn">
-                  Log In
-                </button>
-                <button onClick={onSignUp} className="nav-btn signup-btn">
-                  Try for Free
-                </button>
-              </>
-            )}
+            <a href="/login" className="nav-btn login-btn">
+              Log In
+            </a>
+            <a href="/signup" className="nav-btn signup-btn">
+              Try for Free
+            </a>
           </div>
         </div>
       </nav>
@@ -33,7 +25,7 @@ const LandingPage = ({ onSignUp, onLogin, isAuthenticated, onGoToDashboard }) =>
         <div className="hero-container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Copy Competitors for $1, 
+              Copy Competitors for $1,
               <span className="highlight"> Start For Free</span>
             </h1>
             <p className="hero-subtitle">
@@ -41,20 +33,12 @@ const LandingPage = ({ onSignUp, onLogin, isAuthenticated, onGoToDashboard }) =>
               Get professional, conversion-focused ads delivered to your email in minutes.
             </p>
             <div className="hero-cta">
-              {isAuthenticated ? (
-                <button onClick={onGoToDashboard} className="cta-primary">
-                  Go to Dashboard
-                </button>
-              ) : (
-                <>
-                  <button onClick={onSignUp} className="cta-primary">
-                    Start Creating Ads Free
-                  </button>
-                  <button onClick={onLogin} className="cta-secondary">
-                    Already have an account? Log in
-                  </button>
-                </>
-              )}
+              <a href="/signup" className="cta-primary">
+                Start Creating Ads Free
+              </a>
+              <a href="/login" className="cta-secondary">
+                Already have an account? Log in
+              </a>
             </div>
             <div className="hero-stats">
               <div className="stat">
@@ -153,12 +137,12 @@ const LandingPage = ({ onSignUp, onLogin, isAuthenticated, onGoToDashboard }) =>
           <h2>Ready to Outperform Your Competition?</h2>
           <p>Join thousands of businesses already using TOLcreatives to create winning ads</p>
           <div className="cta-buttons">
-            <button onClick={onSignUp} className="cta-primary large">
+            <a href="/signup" className="cta-primary large">
               Start Free Trial
-            </button>
-            <button onClick={onLogin} className="cta-secondary large">
+            </a>
+            <a href="/login" className="cta-secondary large">
               Log In
-            </button>
+            </a>
           </div>
         </div>
       </section>

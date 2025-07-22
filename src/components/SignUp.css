@@ -1,5 +1,5 @@
-/* Login Component Styles */
-.login-container {
+/* SignUp Component Styles */
+.signup-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -8,7 +8,7 @@
   padding: 2rem;
 }
 
-.login-card {
+.signup-card {
   background: white;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
@@ -18,24 +18,24 @@
   text-align: center;
 }
 
-.login-header {
+.signup-header {
   margin-bottom: 2rem;
 }
 
-.login-header h2 {
+.signup-header h2 {
   font-size: 2rem;
   font-weight: 700;
   color: #080727;
   margin: 1rem 0 0.5rem 0;
 }
 
-.login-header p {
+.signup-header p {
   color: #666;
   font-size: 1rem;
   margin: 0;
 }
 
-.login-form {
+.signup-form {
   text-align: left;
 }
 
@@ -67,7 +67,7 @@
   box-shadow: 0 0 0 3px rgba(240, 133, 90, 0.1);
 }
 
-.login-button {
+.signup-button {
   width: 100%;
   background: #F0855A;
   color: white;
@@ -81,13 +81,13 @@
   margin-top: 1rem;
 }
 
-.login-button:hover:not(:disabled) {
+.signup-button:hover:not(:disabled) {
   background: #e0744a;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(240, 133, 90, 0.3);
 }
 
-.login-button:disabled {
+.signup-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
@@ -113,54 +113,39 @@
   border: 1px solid #c6f6d5;
 }
 
-.login-footer {
+.signup-footer {
   margin-top: 2rem;
   text-align: center;
   padding-top: 1.5rem;
   border-top: 1px solid #e1e5e9;
 }
 
-.forgot-password-link {
-  background: none;
-  border: none;
-  color: #F0855A;
-  text-decoration: none;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.forgot-password-link:hover {
-  text-decoration: underline;
-}
-
-.login-footer p {
+.signup-footer p {
   color: #666;
   margin: 0;
 }
 
-.login-footer a {
+.signup-footer a {
   color: #F0855A;
   text-decoration: none;
   font-weight: 600;
 }
 
-.login-footer a:hover {
+.signup-footer a:hover {
   text-decoration: underline;
 }
 
 /* Responsive Design */
 @media (max-width: 480px) {
-  .login-container {
+  .signup-container {
     padding: 1rem;
   }
   
-  .login-card {
+  .signup-card {
     padding: 2rem;
   }
   
-  .login-header h2 {
+  .signup-header h2 {
     font-size: 1.75rem;
   }
 } 

@@ -8,7 +8,6 @@ function Login({ onLogin }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e) => {
@@ -22,48 +21,25 @@ function Login({ onLogin }) {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-
     setLoading(true);
 
     try {
-      if (isSignUp) {
-        // Sign up new user
-        const { data, error } = await supabase.auth.signUp({
-          email: email,
-          password: password,
-        });
+      // Sign in existing user
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        if (data.user && data.user.identities && data.user.identities.length === 0) {
-          setError('This email is already registered. Please sign in instead.');
-        } else {
-          setSuccessMessage('Account created! Check your email to verify your account, then sign in.');
-          setIsSignUp(false);
-          setPassword('');
-        }
-      } else {
-        // Sign in existing user
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
+      // Success! User is logged in
+      const userData = {
+        email: data.user.email,
+        name: data.user.email.split('@')[0],
+        id: data.user.id
+      };
 
-        if (error) throw error;
-
-        // Success! User is logged in
-        const userData = {
-          email: data.user.email,
-          name: data.user.email.split('@')[0],
-          id: data.user.id
-        };
-
-        onLogin(userData);
-      }
+      onLogin(userData);
     } catch (error) {
       console.error('Auth error:', error);
       if (error.message.includes('Invalid login credentials')) {
@@ -100,27 +76,25 @@ function Login({ onLogin }) {
 
   return (
     <div className="login-container">
-      <div className="login-box">
-        <div className="login-logo">
-          <Logo size="large" />
+      <div className="login-card">
+        <div className="login-header">
+          <Logo size="medium" showText={true} />
+          <h2>Welcome Back</h2>
+          <p>Sign in to your account</p>
         </div>
-        <h2>{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
-        <p className="login-subtitle">
-          {isSignUp 
-            ? 'Sign up to start creating amazing ads' 
-            : 'Sign in to continue to your dashboard'}
-        </p>
 
         <form onSubmit={handleSubmit} className="login-form">
+          {error && <div className="error-message">{error}</div>}
+          {successMessage && <div className="success-message">{successMessage}</div>}
+
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email Address</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="login-input"
               required
             />
           </div>
@@ -132,55 +106,29 @@ function Login({ onLogin }) {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password (min 6 characters)"
-              className="login-input"
+              placeholder="Enter your password"
               required
             />
           </div>
-
-          {error && <div className="login-error">{error}</div>}
-          {successMessage && <div className="login-success">{successMessage}</div>}
 
           <button 
             type="submit" 
             className="login-button"
             disabled={loading}
           >
-            {loading ? (
-              <>
-                <span className="spinner"></span>
-                <span>{isSignUp ? 'Creating Account...' : 'Signing In...'}</span>
-              </>
-            ) : (
-              <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
-            )}
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
-
-          {!isSignUp && (
-            <button 
-              type="button"
-              onClick={handleForgotPassword}
-              className="forgot-password-btn"
-            >
-              Forgot Password?
-            </button>
-          )}
         </form>
 
         <div className="login-footer">
-          <p>
-            {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-            <button 
-              onClick={() => {
-                setIsSignUp(!isSignUp);
-                setError('');
-                setSuccessMessage('');
-              }}
-              className="switch-mode-btn"
-            >
-              {isSignUp ? 'Sign In' : 'Sign Up'}
-            </button>
-          </p>
+          <button 
+            type="button" 
+            onClick={handleForgotPassword}
+            className="forgot-password-link"
+          >
+            Forgot your password?
+          </button>
+          <p>Don't have an account? <a href="/signup">Sign up</a></p>
         </div>
       </div>
     </div>
