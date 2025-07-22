@@ -104,9 +104,21 @@ function App() {
   // Show loading while checking authentication
   if (checkingAuth) {
     return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Loading...</p>
+      <div className="premium-loading-screen">
+        <div className="loading-content">
+          <div className="logo-animation">
+            <Logo size="large" />
+          </div>
+          <div className="loading-text">
+            <h2>Loading TOLcreatives</h2>
+            <p>Preparing your creative workspace...</p>
+          </div>
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div className="progress-fill"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -517,9 +529,21 @@ function App() {
               </div>
 
               {loading && (
-                <div className="loading-message">
-                  <p>Processing your request...</p>
-                  <p>Your ads will arrive in your inbox soon!</p>
+                <div className="premium-loading-overlay">
+                  <div className="loading-content">
+                    <div className="logo-animation">
+                      <Logo size="medium" />
+                    </div>
+                    <div className="loading-text">
+                      <h3>Generating Your Ads</h3>
+                      <p>Creating amazing content for your brand...</p>
+                    </div>
+                    <div className="progress-container">
+                      <div className="progress-bar">
+                        <div className="progress-fill"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </>

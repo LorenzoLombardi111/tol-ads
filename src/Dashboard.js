@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
+import Logo from './Logo';
 import './Dashboard.css';
 
 function Dashboard({ userId }) {
@@ -103,9 +104,19 @@ function Dashboard({ userId }) {
   if (loading) {
     return (
       <div className="dashboard-container">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading your ad history...</p>
+        <div className="premium-loading-content">
+          <div className="logo-animation">
+            <Logo size="medium" />
+          </div>
+          <div className="loading-text">
+            <h3>Loading Your Dashboard</h3>
+            <p>Fetching your creative history...</p>
+          </div>
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div className="progress-fill"></div>
+            </div>
+          </div>
         </div>
       </div>
     );
