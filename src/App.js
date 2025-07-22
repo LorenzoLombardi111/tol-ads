@@ -256,6 +256,43 @@ function App() {
       return;
     }
 
+    // Check credits first
+    try {
+      const { data: userCredits, error: creditsError } = await supabase
+        .from('user_credits')
+        .select('credits_available')
+        .eq('user_id', userData.id)
+        .single();
+
+      if (creditsError) {
+        setError('Unable to check your credits. Please try again.');
+        return;
+      }
+
+      const availableCredits = userCredits?.credits_available || 0;
+      if (availableCredits < 1) {
+        setError('You don\'t have enough credits to generate ads. Please purchase more credits.');
+        return;
+      }
+
+      // Deduct 1 credit
+      const { data: creditResult, error: deductionError } = await supabase
+        .rpc('update_user_credits', {
+          target_user_id: userData.id,
+          credit_change: -1,
+          transaction_type: 'usage',
+          description: 'Ad generation - 1 credit used'
+        });
+
+      if (deductionError || !creditResult.success) {
+        setError('Failed to process credits. Please try again.');
+        return;
+      }
+    } catch (error) {
+      setError('Unable to verify your credits. Please try again.');
+      return;
+    }
+
     // Save email if remember is checked
     if (rememberEmail) {
       localStorage.setItem('userEmail', userEmail);
@@ -300,7 +337,7 @@ function App() {
 
       // Success!
       setSubmitted(true);
-                  setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes.`);
+      setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes. 1 credit deducted.`);
       
     } catch (error) {
       console.error('Error:', error);
