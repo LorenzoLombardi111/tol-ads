@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from '../Logo';
 import './LandingPage.css';
 
-const LandingPage = ({ onSignUp, onLogin }) => {
+const LandingPage = ({ onSignUp, onLogin, isAuthenticated, onGoToDashboard }) => {
   return (
     <div className="landing-page">
       {/* Navigation */}
@@ -10,12 +10,20 @@ const LandingPage = ({ onSignUp, onLogin }) => {
         <div className="nav-container">
           <Logo size="medium" showText={true} />
           <div className="nav-buttons">
-            <button onClick={onLogin} className="nav-btn login-btn">
-              Log In
-            </button>
-            <button onClick={onSignUp} className="nav-btn signup-btn">
-              Try for Free
-            </button>
+            {isAuthenticated ? (
+              <button onClick={onGoToDashboard} className="nav-btn signup-btn">
+                Go to Dashboard
+              </button>
+            ) : (
+              <>
+                <button onClick={onLogin} className="nav-btn login-btn">
+                  Log In
+                </button>
+                <button onClick={onSignUp} className="nav-btn signup-btn">
+                  Try for Free
+                </button>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -33,12 +41,20 @@ const LandingPage = ({ onSignUp, onLogin }) => {
               Get professional, conversion-focused ads delivered to your email in minutes.
             </p>
             <div className="hero-cta">
-              <button onClick={onSignUp} className="cta-primary">
-                Start Creating Ads Free
-              </button>
-              <button onClick={onLogin} className="cta-secondary">
-                Already have an account? Log in
-              </button>
+              {isAuthenticated ? (
+                <button onClick={onGoToDashboard} className="cta-primary">
+                  Go to Dashboard
+                </button>
+              ) : (
+                <>
+                  <button onClick={onSignUp} className="cta-primary">
+                    Start Creating Ads Free
+                  </button>
+                  <button onClick={onLogin} className="cta-secondary">
+                    Already have an account? Log in
+                  </button>
+                </>
+              )}
             </div>
             <div className="hero-stats">
               <div className="stat">

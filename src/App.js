@@ -417,15 +417,13 @@ function App() {
     return <Login onLogin={handleLogin} />;
   }
 
-  // Show landing page if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <LandingPage 
-        onSignUp={handleSignUp}
-        onLogin={() => setShowLogin(true)}
-      />
-    );
-  }
+  // Always show landing page first
+  return (
+    <LandingPage 
+      onSignUp={handleSignUp}
+      onLogin={() => setShowLogin(true)}
+    />
+  );
 
   // Show main app if authenticated
   return (
