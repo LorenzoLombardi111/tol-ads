@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import LandingPage from './components/LandingPage';
 import Logo from './Logo';
 import { supabase } from './supabaseClient';
 
@@ -14,6 +15,7 @@ function App() {
   
   // Navigation state
   const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' or 'generate'
+  const [showLogin, setShowLogin] = useState(false);
 
   // Your existing states for ad generation
   const [productImage, setProductImage] = useState(null);
@@ -87,6 +89,11 @@ function App() {
       setUserEmail(user.email);
       setRememberEmail(true);
     }
+  };
+
+  // Handle signup (redirects to login)
+  const handleSignUp = () => {
+    setShowLogin(true);
   };
 
   // Handle logout
@@ -386,6 +393,41 @@ function App() {
           </div>
         );
 
+  // Show loading while checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="App">
+        <div className="loading-screen">
+          <div className="loading-content">
+            <div className="logo-animation">
+              <Logo size="large" />
+            </div>
+            <div className="loading-text">
+              <h3>Loading TOLcreatives</h3>
+              <p>Preparing your workspace...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login component if requested
+  if (showLogin) {
+    return <Login onLogin={handleLogin} />;
+  }
+
+  // Show landing page if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <LandingPage 
+        onSignUp={handleSignUp}
+        onLogin={() => setShowLogin(true)}
+      />
+    );
+  }
+
+  // Show main app if authenticated
   return (
     <div className="App">
       {/* User Header */}
