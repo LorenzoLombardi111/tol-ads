@@ -108,33 +108,6 @@ function App() {
     }
   };
 
-  // Show loading while checking authentication
-  if (checkingAuth) {
-    return (
-      <div className="premium-loading-screen">
-        <div className="loading-content">
-          <div className="logo-animation">
-            <Logo size="large" />
-          </div>
-          <div className="loading-text">
-            <h2>Loading TOLcreatives</h2>
-            <p>Preparing your creative workspace...</p>
-          </div>
-          <div className="progress-container">
-            <div className="progress-bar">
-              <div className="progress-fill"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Show login page if not authenticated
-  if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
-  }
-
   // Email validation
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -251,7 +224,7 @@ function App() {
     }
   };
 
-  // Generate ads with email - UPDATED to save to Supabase
+  // Generate ads with email - UPDATED with credit validation and deduction
   const generateAds = async () => {
     // Validate all inputs
     if (!productImage || !inspirationImage) {
@@ -263,7 +236,7 @@ function App() {
       return;
     }
 
-    // Check credits first
+    // Check credits first (added this block)
     try {
       const { data: userCredits, error: creditsError } = await supabase
         .from('user_credits')
@@ -308,7 +281,7 @@ function App() {
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
       // First, create a record in Supabase
       const { data: adRecord, error: dbError } = await supabase
@@ -372,26 +345,26 @@ function App() {
     }
   };
 
-          // Navigation component
-        const Navigation = () => (
-          <div className="navigation-tabs">
-            <button
-              className={`nav-tab ${currentView === 'dashboard' ? 'active' : ''}`}
-              onClick={() => setCurrentView('dashboard')}
-            >
-              Dashboard
-            </button>
-            <button
-              className={`nav-tab ${currentView === 'generate' ? 'active' : ''}`}
-              onClick={() => {
-                setCurrentView('generate');
-                resetAll();
-              }}
-            >
-              Generate New Ad
-            </button>
-          </div>
-        );
+  // Navigation component
+  const Navigation = () => (
+    <div className="navigation-tabs">
+      <button
+        className={`nav-tab ${currentView === 'dashboard' ? 'active' : ''}`}
+        onClick={() => setCurrentView('dashboard')}
+      >
+        Dashboard
+      </button>
+      <button
+        className={`nav-tab ${currentView === 'generate' ? 'active' : ''}`}
+        onClick={() => {
+          setCurrentView('generate');
+          resetAll();
+        }}
+      >
+        Generate New Ad
+      </button>
+    </div>
+  );
 
   // Show loading while checking authentication
   if (checkingAuth) {
@@ -417,239 +390,189 @@ function App() {
     return <Login onLogin={handleLogin} />;
   }
 
-  // Show landing page if not authenticated, otherwise show main app
-  if (!isAuthenticated) {
+  // Show main app if authenticated
+  if (isAuthenticated) {
     return (
-      <LandingPage 
-        onSignUp={handleSignUp}
-        onLogin={() => setShowLogin(true)}
-      />
+      <div className="App">
+        {/* User Header */}
+        <div className="user-header">
+          <div className="user-info">
+            <span>Welcome, {userData?.name || userData?.email}!</span>
+          </div>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
+        </div>
+
+        <div className="main-header">
+          <div className="header-content">
+            <div className="logo-section">
+              <Logo size="large" />
+            </div>
+            <div className="header-nav">
+              <Navigation />
+            </div>
+          </div>
+        </div>
+
+        <div className="main-content">
+          {currentView === 'dashboard' ? (
+            <Dashboard userId={userData.id} />
+          ) : (
+          <>
+            <p className="subtitle">Drag & drop or click to upload images</p>
+            
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
+            
+            {!submitted ? (
+              <>
+                <div className="upload-section">
+                  {/* Product Image Upload */}
+                  <div 
+                    className={`upload-box ${dragActive.product ? 'drag-active' : ''}`}
+                    onDragEnter={(e) => handleDrag(e, 'product', true)}
+                    onDragOver={(e) => handleDrag(e, 'product', true)}
+                    onDragLeave={(e) => handleDragLeave(e, 'product')}
+                    onDrop={(e) => handleDrop(e, 'product')}
+                  >
+                    <h3>Product Image</h3>
+                    {!productImage ? (
+                      <>
+                        <div className="upload-icon">
+                          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                          </svg>
+                        </div>
+                        <p>Drag & drop your product image here</p>
+                        <p className="or">or</p>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={handleProductImageUpload}
+                          id="product-upload"
+                          className="file-input"
+                        />
+                        <label htmlFor="product-upload" className="file-label">
+                          Browse Files
+                        </label>
+                      </>
+                    ) : (
+                      <div className="preview-container">
+                        <img src={productImage} alt="Product" className="preview" />
+                        <button 
+                          className="remove-btn" 
+                          onClick={() => setProductImage(null)}
+                          title="Remove image"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Inspiration Image Upload */}
+                  <div 
+                    className={`upload-box ${dragActive.inspiration ? 'drag-active' : ''}`}
+                    onDragEnter={(e) => handleDrag(e, 'inspiration', true)}
+                    onDragOver={(e) => handleDrag(e, 'inspiration', true)}
+                    onDragLeave={(e) => handleDragLeave(e, 'inspiration')}
+                    onDrop={(e) => handleDrop(e, 'inspiration')}
+                  >
+                    <h3>Inspiration Image</h3>
+                    {!inspirationImage ? (
+                      <>
+                        <div className="upload-icon">
+                          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                          </svg>
+                        </div>
+                        <p>Drag & drop inspiration image here</p>
+                        <p className="or">or</p>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={handleInspirationImageUpload}
+                          id="inspiration-upload"
+                          className="file-input"
+                        />
+                        <label htmlFor="inspiration-upload" className="file-label">
+                          Browse Files
+                        </label>
+                      </>
+                    ) : (
+                      <div className="preview-container">
+                        <img src={inspirationImage} alt="Inspiration" className="preview" />
+                        <button 
+                          className="remove-btn" 
+                          onClick={() => setInspirationImage(null)}
+                          title="Remove image"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Email Input */}
+                <div className="email-section">
+                  <div className="email-input-group">
+                    <input
+                      type="email"
+                      placeholder="Enter your email address"
+                      value={userEmail}
+                      onChange={handleEmailChange}
+                      className={`email-input ${emailError ? 'error' : ''}`}
+                    />
+                    <label className="remember-email">
+                      <input
+                        type="checkbox"
+                        checked={rememberEmail}
+                        onChange={handleRememberEmail}
+                      />
+                      Remember my email
+                    </label>
+                  </div>
+                  {emailError && <div className="email-error">{emailError}</div>}
+                </div>
+
+                {/* Generate Button */}
+                <button 
+                  onClick={generateAds}
+                  disabled={loading || !productImage || !inspirationImage || !userEmail}
+                  className="generate-btn"
+                >
+                  {loading ? 'Generating...' : 'Generate Ads'}
+                </button>
+              </>
+            ) : (
+              <div className="success-section">
+                <div className="success-icon">✅</div>
+                <h3>Success!</h3>
+                <p>Your ad generation request has been submitted successfully.</p>
+                <button onClick={resetAll} className="reset-btn">
+                  Generate Another Ad
+                </button>
+              </div>
+            )}
+          </>
+          )}
+        </div>
+      </div>
     );
   }
 
-  // Show main app if authenticated
+  // Always show landing page as the first page everyone sees
   return (
-    <div className="App">
-      {/* User Header */}
-      <div className="user-header">
-        <div className="user-info">
-          <span>Welcome, {userData?.name || userData?.email}!</span>
-        </div>
-        <button onClick={handleLogout} className="logout-button">
-          Logout
-        </button>
-      </div>
-
-      <div className="main-header">
-        <div className="header-content">
-          <div className="logo-section">
-            <Logo size="large" />
-          </div>
-          <div className="header-nav">
-            <Navigation />
-          </div>
-        </div>
-      </div>
-
-      <div className="main-content">
-        {currentView === 'dashboard' ? (
-          <Dashboard userId={userData.id} />
-        ) : (
-        <>
-          <p className="subtitle">Drag & drop or click to upload images</p>
-          
-          {error && <div className="error-message">{error}</div>}
-          {success && <div className="success-message">{success}</div>}
-          
-          {!submitted ? (
-            <>
-              <div className="upload-section">
-                {/* Product Image Upload */}
-                <div 
-                  className={`upload-box ${dragActive.product ? 'drag-active' : ''}`}
-                  onDragEnter={(e) => handleDrag(e, 'product', true)}
-                  onDragOver={(e) => handleDrag(e, 'product', true)}
-                  onDragLeave={(e) => handleDragLeave(e, 'product')}
-                  onDrop={(e) => handleDrop(e, 'product')}
-                >
-                  <h3>Product Image</h3>
-                  {!productImage ? (
-                    <>
-                      <div className="upload-icon">
-                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                          <polyline points="17 8 12 3 7 8"></polyline>
-                          <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                      </div>
-                      <p>Drag & drop your product image here</p>
-                      <p className="or">or</p>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleProductImageUpload}
-                        id="product-upload"
-                        className="file-input"
-                      />
-                      <label htmlFor="product-upload" className="file-label">
-                        Browse Files
-                      </label>
-                    </>
-                  ) : (
-                    <div className="preview-container">
-                      <img src={productImage} alt="Product" className="preview" />
-                      <button 
-                        className="remove-btn" 
-                        onClick={() => setProductImage(null)}
-                        title="Remove image"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Inspiration Image Upload */}
-                <div 
-                  className={`upload-box ${dragActive.inspiration ? 'drag-active' : ''}`}
-                  onDragEnter={(e) => handleDrag(e, 'inspiration', true)}
-                  onDragOver={(e) => handleDrag(e, 'inspiration', true)}
-                  onDragLeave={(e) => handleDragLeave(e, 'inspiration')}
-                  onDrop={(e) => handleDrop(e, 'inspiration')}
-                >
-                  <h3>Inspiration Image</h3>
-                  {!inspirationImage ? (
-                    <>
-                      <div className="upload-icon">
-                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                          <polyline points="17 8 12 3 7 8"></polyline>
-                          <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                      </div>
-                      <p>Drag & drop your inspiration ad here</p>
-                      <p className="or">or</p>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleInspirationImageUpload}
-                        id="inspiration-upload"
-                        className="file-input"
-                      />
-                      <label htmlFor="inspiration-upload" className="file-label">
-                        Browse Files
-                      </label>
-                    </>
-                  ) : (
-                    <div className="preview-container">
-                      <img src={inspirationImage} alt="Inspiration" className="preview" />
-                      <button 
-                        className="remove-btn" 
-                        onClick={() => setInspirationImage(null)}
-                        title="Remove image"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Email Input Section */}
-              <div className="email-section">
-                <div className="email-container">
-                  <h3>Your Email</h3>
-                  <p className="email-description">We'll send your generated ads here</p>
-                  <div className="email-input-wrapper">
-                    <input
-                      type="email"
-                      value={userEmail}
-                      onChange={handleEmailChange}
-                      onBlur={() => validateEmail(userEmail)}
-                      placeholder="Enter your email address"
-                      className={`email-input ${emailError ? 'error' : ''}`}
-                    />
-                    {emailError && <span className="email-error">{emailError}</span>}
-                  </div>
-                  <label className="remember-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={rememberEmail}
-                      onChange={handleRememberEmail}
-                    />
-                    <span>Remember my email for next time</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="button-group">
-                <button 
-                  onClick={generateAds} 
-                  disabled={loading || !productImage || !inspirationImage || !userEmail}
-                  className="generate-button"
-                >
-                  {loading ? (
-                    <>
-                      <span className="spinner"></span>
-                      <span>Sending to your email...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Generate Ads</span>
-                    </>
-                  )}
-                </button>
-                
-                {(productImage || inspirationImage) && (
-                  <button onClick={resetAll} className="reset-button">
-                    Start Over
-                  </button>
-                )}
-              </div>
-
-              {loading && (
-                <div className="premium-loading-overlay">
-                  <div className="loading-content">
-                    <div className="logo-animation">
-                      <Logo size="medium" />
-                    </div>
-                    <div className="loading-text">
-                      <h3>Generating Your Ads</h3>
-                      <p>Creating amazing content for your brand...</p>
-                    </div>
-                    <div className="progress-container">
-                      <div className="progress-bar">
-                        <div className="progress-fill"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          ) : (
-            // Success state - shown after submission
-            <div className="success-state">
-              <div className="success-icon">
-                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-              </div>
-              <h2>Success!</h2>
-              <p className="success-text">We got your images!</p>
-              <p className="success-subtext">Check your email at:</p>
-              <p className="email-display">{userEmail}</p>
-              <p className="email-hint">Your custom ads will arrive in about 5 minutes.</p>
-              
-              <button onClick={resetAll} className="new-generation-button">
-                Create More Ads
-              </button>
-            </div>
-          )}
-        </>
-      )}
-      </div>
-    </div>
+    <LandingPage 
+      onSignUp={handleSignUp}
+      onLogin={() => setShowLogin(true)}
+    />
   );
 }
 
