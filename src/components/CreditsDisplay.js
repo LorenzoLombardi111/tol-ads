@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient';
 import './CreditsDisplay.css';
 
 const CreditsDisplay = ({ userId }) => {
+  console.log('CreditsDisplay component rendered with userId:', userId);
   const [credits, setCredits] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,8 +39,12 @@ const CreditsDisplay = ({ userId }) => {
   }, [userId]);
 
   useEffect(() => {
+    console.log('CreditsDisplay useEffect triggered with userId:', userId);
     if (userId) {
+      console.log('Calling fetchUserCredits...');
       fetchUserCredits();
+    } else {
+      console.log('No userId provided, skipping fetchUserCredits');
     }
   }, [userId, fetchUserCredits]);
 
