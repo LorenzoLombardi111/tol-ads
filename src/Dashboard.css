@@ -17,6 +17,9 @@
   --glass-bg: rgba(255, 255, 255, 0.1);
   --glass-border: rgba(255, 255, 255, 0.2);
   --transition: all 0.3s ease;
+  --color-main: #f8f9fa;
+  --color-dark-blue: #080727;
+  --color-terra: #F0855A;
 }
 
 .dashboard-container {
