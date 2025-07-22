@@ -9,6 +9,7 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
 
   const fetchUserCredits = useCallback(async () => {
     try {
+      console.log('Fetching credits for user:', userId);
       setLoading(true);
       setError(null);
 
@@ -17,6 +18,8 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
         .select('credits_available')
         .eq('user_id', userId)
         .single();
+
+      console.log('Credits response:', { data, error });
 
       if (error && error.code !== 'PGRST116') {
         throw error;
@@ -28,11 +31,13 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
       if (onCreditsUpdate) {
         onCreditsUpdate(creditAmount);
       }
+      console.log('Credits loaded successfully:', creditAmount);
     } catch (err) {
       console.error('Error fetching credits:', err);
       setError('Failed to load credits');
     } finally {
       setLoading(false);
+      console.log('Credits loading finished');
     }
   }, [userId, onCreditsUpdate]);
 

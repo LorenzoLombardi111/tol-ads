@@ -17,6 +17,7 @@ function Dashboard({ userId }) {
 
   const fetchAdHistory = useCallback(async () => {
     try {
+      console.log('Fetching ad history for user:', userId);
       setLoading(true);
       setError('');
 
@@ -26,15 +27,19 @@ function Dashboard({ userId }) {
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
+      console.log('Supabase response:', { data, error });
+
       if (error) throw error;
 
       setAds(data || []);
       setFilteredAds(data || []);
+      console.log('Ad history loaded successfully');
     } catch (err) {
       console.error('Error fetching ad history:', err);
       setError('Failed to load your ad history. Please try again.');
     } finally {
       setLoading(false);
+      console.log('Loading finished');
     }
   }, [userId]);
 
