@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import './CreditsDisplay.css';
 
@@ -37,9 +37,11 @@ const CreditsDisplay = ({ userId }) => {
     }
   }, [userId]);
 
-
-
-
+  useEffect(() => {
+    if (userId) {
+      fetchUserCredits();
+    }
+  }, [userId, fetchUserCredits]);
 
   if (loading) {
     return (
