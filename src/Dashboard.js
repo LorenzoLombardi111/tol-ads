@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from './supabaseClient';
 import Logo from './Logo';
 import CreditsDisplay from './components/CreditsDisplay';
@@ -15,11 +15,7 @@ function Dashboard({ userId }) {
   const [dateFilter, setDateFilter] = useState('all');
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
 
-  useEffect(() => {
-    fetchAdHistory();
-  }, [userId]);
-
-  const fetchAdHistory = async () => {
+  const fetchAdHistory = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -40,7 +36,11 @@ function Dashboard({ userId }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchAdHistory();
+  }, [fetchAdHistory]);
 
   // Apply filters
   useEffect(() => {

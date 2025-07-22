@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 import './CreditsDisplay.css';
 
@@ -7,13 +7,7 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (userId) {
-      fetchUserCredits();
-    }
-  }, [userId]);
-
-  const fetchUserCredits = async () => {
+  const fetchUserCredits = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -40,7 +34,9 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, onCreditsUpdate]);
+
+
 
   // Refresh credits when called from parent
   React.useImperativeHandle(onCreditsUpdate, () => ({
