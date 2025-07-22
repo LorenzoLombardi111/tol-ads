@@ -113,12 +113,12 @@ function Dashboard({ userId }) {
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h2>📊 Your Ad History</h2>
-        <button onClick={fetchAdHistory} className="refresh-btn">
-          🔄 Refresh
-        </button>
-      </div>
+              <div className="dashboard-header">
+          <h2>Your Ad History</h2>
+          <button onClick={fetchAdHistory} className="refresh-btn">
+            Refresh
+          </button>
+        </div>
 
       {error && (
         <div className="error-banner">
@@ -179,7 +179,13 @@ function Dashboard({ userId }) {
 
       {filteredAds.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📭</div>
+          <div className="empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
           <h3>No ads found</h3>
           <p>
             {ads.length === 0 
@@ -249,7 +255,7 @@ function Dashboard({ userId }) {
 
               {ad.status === 'completed' && ad.generated_ad_urls && (
                 <button className="view-results-btn">
-                  View Results →
+                  View Results
                 </button>
               )}
             </div>

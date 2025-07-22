@@ -288,7 +288,7 @@ function App() {
 
       // Success!
       setSubmitted(true);
-      setSuccess(`🎉 We got your images! Relax and look at your email (${userEmail}) in 5 minutes.`);
+                  setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes.`);
       
     } catch (error) {
       console.error('Error:', error);
@@ -316,26 +316,26 @@ function App() {
     }
   };
 
-  // Navigation component
-  const Navigation = () => (
-    <div className="navigation-tabs">
-      <button
-        className={`nav-tab ${currentView === 'dashboard' ? 'active' : ''}`}
-        onClick={() => setCurrentView('dashboard')}
-      >
-        📊 Dashboard
-      </button>
-      <button
-        className={`nav-tab ${currentView === 'generate' ? 'active' : ''}`}
-        onClick={() => {
-          setCurrentView('generate');
-          resetAll();
-        }}
-      >
-        ✨ Generate New Ad
-      </button>
-    </div>
-  );
+          // Navigation component
+        const Navigation = () => (
+          <div className="navigation-tabs">
+            <button
+              className={`nav-tab ${currentView === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setCurrentView('dashboard')}
+            >
+              Dashboard
+            </button>
+            <button
+              className={`nav-tab ${currentView === 'generate' ? 'active' : ''}`}
+              onClick={() => {
+                setCurrentView('generate');
+                resetAll();
+              }}
+            >
+              Generate New Ad
+            </button>
+          </div>
+        );
 
   return (
     <div className="App">
@@ -381,7 +381,7 @@ function App() {
                   onDragLeave={(e) => handleDragLeave(e, 'product')}
                   onDrop={(e) => handleDrop(e, 'product')}
                 >
-                  <h3>📦 Product Image</h3>
+                  <h3>Product Image</h3>
                   {!productImage ? (
                     <>
                       <div className="upload-icon">
@@ -426,7 +426,7 @@ function App() {
                   onDragLeave={(e) => handleDragLeave(e, 'inspiration')}
                   onDrop={(e) => handleDrop(e, 'inspiration')}
                 >
-                  <h3>💡 Inspiration Ad</h3>
+                  <h3>Inspiration Image</h3>
                   {!inspirationImage ? (
                     <>
                       <div className="upload-icon">
@@ -467,7 +467,7 @@ function App() {
               {/* Email Input Section */}
               <div className="email-section">
                 <div className="email-container">
-                  <h3>📧 Your Email</h3>
+                  <h3>Your Email</h3>
                   <p className="email-description">We'll send your generated ads here</p>
                   <div className="email-input-wrapper">
                     <input
@@ -504,7 +504,6 @@ function App() {
                     </>
                   ) : (
                     <>
-                      <span>✨</span>
                       <span>Generate Ads</span>
                     </>
                   )}
@@ -512,14 +511,14 @@ function App() {
                 
                 {(productImage || inspirationImage) && (
                   <button onClick={resetAll} className="reset-button">
-                    🔄 Start Over
+                    Start Over
                   </button>
                 )}
               </div>
 
               {loading && (
                 <div className="loading-message">
-                  <p>🚀 Processing your request...</p>
+                  <p>Processing your request...</p>
                   <p>Your ads will arrive in your inbox soon!</p>
                 </div>
               )}
@@ -533,7 +532,7 @@ function App() {
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </div>
-              <h2>Success! 🎉</h2>
+              <h2>Success!</h2>
               <p className="success-text">We got your images!</p>
               <p className="success-subtext">Check your email at:</p>
               <p className="email-display">{userEmail}</p>
