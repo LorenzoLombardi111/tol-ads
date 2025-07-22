@@ -349,15 +349,21 @@ function App() {
         </button>
       </div>
 
-      <div className="app-header">
-        <Logo size="large" />
+      <div className="main-header">
+        <div className="header-content">
+          <div className="logo-section">
+            <Logo size="large" />
+          </div>
+          <div className="header-nav">
+            <Navigation />
+          </div>
+        </div>
       </div>
-      
-      <Navigation />
 
-      {currentView === 'dashboard' ? (
-        <Dashboard userId={userData.id} />
-      ) : (
+      <div className="main-content">
+        {currentView === 'dashboard' ? (
+          <Dashboard userId={userData.id} />
+        ) : (
         <>
           <p className="subtitle">Drag & drop or click to upload images</p>
           
@@ -540,6 +546,7 @@ function App() {
           )}
         </>
       )}
+      </div>
     </div>
   );
 }

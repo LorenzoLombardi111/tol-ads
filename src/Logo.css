@@ -17,18 +17,18 @@
 }
 
 .logo-small .logo-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.logo-medium .logo-icon {
   width: 32px;
   height: 32px;
 }
 
-.logo-large .logo-icon {
+.logo-medium .logo-icon {
   width: 48px;
   height: 48px;
+}
+
+.logo-large .logo-icon {
+  width: 80px;
+  height: 80px;
 }
 
 .logo-text {
