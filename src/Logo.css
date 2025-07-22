@@ -1,0 +1,85 @@
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 700;
+}
+
+.logo-icon {
+  flex-shrink: 0;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-small .logo-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-medium .logo-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.logo-large .logo-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-brand {
+  font-size: 1.2em;
+  color: #080727;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.logo-creatives {
+  font-size: 0.8em;
+  color: #F0855A;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: lowercase;
+}
+
+.logo-small .logo-brand {
+  font-size: 1em;
+}
+
+.logo-small .logo-creatives {
+  font-size: 0.7em;
+}
+
+.logo-large .logo-brand {
+  font-size: 1.4em;
+}
+
+.logo-large .logo-creatives {
+  font-size: 0.9em;
+}
+
+/* Animation for logo on hover */
+.logo-container:hover .logo-icon {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.logo-container:hover .logo-brand {
+  color: #F0855A;
+  transition: color 0.2s ease;
+}
+
+.logo-container:hover .logo-creatives {
+  color: #080727;
+  transition: color 0.2s ease;
+} 

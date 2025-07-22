@@ -28,14 +28,10 @@
   }
 }
 
-.login-box h1 {
-  font-size: 2.2em;
-  margin-bottom: 10px;
-  background: linear-gradient(45deg, #4CAF50, #2196F3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-align: center;
+.login-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .login-box h2 {

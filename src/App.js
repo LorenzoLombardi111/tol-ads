@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import Logo from './Logo';
 import { supabase } from './supabaseClient';
 
 function App() {
@@ -348,7 +349,9 @@ function App() {
         </button>
       </div>
 
-      <h1>🎨 Ad Generator</h1>
+      <div className="app-header">
+        <Logo size="large" />
+      </div>
       
       <Navigation />
 

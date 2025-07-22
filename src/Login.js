@@ -1,6 +1,7 @@
 import './Login.css';
 import { useState } from 'react';
 import { supabase } from './supabaseClient';
+import Logo from './Logo';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -100,7 +101,9 @@ function Login({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>🎨 Ad Generator</h1>
+        <div className="login-logo">
+          <Logo size="large" />
+        </div>
         <h2>{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
         <p className="login-subtitle">
           {isSignUp 

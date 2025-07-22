@@ -514,6 +514,15 @@ h1 {
   color: #FFFFFF;
 }
 
+/* App Header */
+.app-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 30px 0;
+  padding: 20px;
+}
+
 /* User Header */
 .user-header {
   display: flex;
