@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 import './CreditsDisplay.css';
 
-const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
+const CreditsDisplay = ({ userId }) => {
   const [credits, setCredits] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,10 +27,6 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
 
       const creditAmount = data?.credits_available || 0;
       setCredits(creditAmount);
-      
-      if (onCreditsUpdate) {
-        onCreditsUpdate(creditAmount);
-      }
       console.log('Credits loaded successfully:', creditAmount);
     } catch (err) {
       console.error('Error fetching credits:', err);
@@ -39,14 +35,11 @@ const CreditsDisplay = ({ userId, onCreditsUpdate }) => {
       setLoading(false);
       console.log('Credits loading finished');
     }
-  }, [userId, onCreditsUpdate]);
+  }, [userId]);
 
 
 
-  // Refresh credits when called from parent
-  React.useImperativeHandle(onCreditsUpdate, () => ({
-    refresh: fetchUserCredits
-  }));
+
 
   if (loading) {
     return (

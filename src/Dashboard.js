@@ -139,7 +139,7 @@ function Dashboard({ userId }) {
     <div className="dashboard-container">
       {/* Credits Section */}
       <div className="credits-section">
-        <CreditsDisplay userId={userId} onCreditsUpdate={fetchAdHistory} />
+        <CreditsDisplay userId={userId} />
         <button 
           onClick={() => setShowPurchaseModal(true)}
           className="purchase-credits-btn"
