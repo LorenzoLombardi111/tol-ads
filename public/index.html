@@ -2,42 +2,262 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    
+    <!-- Primary Meta Tags -->
+    <title>TOLcreatives - AI-Powered Ad Generator | Create Professional Ads Instantly</title>
+    <meta name="title" content="TOLcreatives - AI-Powered Ad Generator | Create Professional Ads Instantly" />
+    <meta name="description" content="Transform your product images into stunning, professional ads with AI. Upload your product and inspiration images, and get custom ads delivered to your email in minutes. Perfect for e-commerce, marketing, and social media campaigns." />
+    <meta name="keywords" content="AI ad generator, marketing automation, social media ads, e-commerce marketing, product advertising, creative design, digital marketing" />
+    <meta name="author" content="TOLcreatives" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>TOLcreatives</title>
+    <meta name="theme-color" content="#F0855A" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tolcreatives.com/" />
+    <meta property="og:title" content="TOLcreatives - AI-Powered Ad Generator" />
+    <meta property="og:description" content="Transform your product images into stunning, professional ads with AI. Get custom ads delivered to your email in minutes." />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="TOLcreatives" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://tolcreatives.com/" />
+    <meta property="twitter:title" content="TOLcreatives - AI-Powered Ad Generator" />
+    <meta property="twitter:description" content="Transform your product images into stunning, professional ads with AI. Get custom ads delivered to your email in minutes." />
+    <meta property="twitter:image" content="%PUBLIC_URL%/og-image.png" />
+    
+    <!-- Additional Meta Tags -->
+    <meta name="application-name" content="TOLcreatives" />
+    <meta name="msapplication-TileColor" content="#F0855A" />
+    <meta name="msapplication-config" content="%PUBLIC_URL%/browserconfig.xml" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "TOLcreatives",
+      "description": "AI-powered ad generator that transforms product images into professional advertisements",
+      "url": "https://tolcreatives.com",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "TOLcreatives"
+      }
+    }
+    </script>
+    
+    <!-- Initial CSS for loading state -->
+    <style>
+      /* Critical CSS for initial loading */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #FFFFFF 0%, #fafafa 100%);
+        color: #080727;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      
+      #root {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .initial-loading {
+        text-align: center;
+        max-width: 400px;
+        padding: 40px 20px;
+      }
+      
+      .initial-logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 30px;
+        background: linear-gradient(135deg, #F0855A, #e0744a);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 24px;
+        animation: logoPulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes logoPulse {
+        0%, 100% { 
+          transform: scale(1); 
+          opacity: 1;
+        }
+        50% { 
+          transform: scale(1.05); 
+          opacity: 0.9;
+        }
+      }
+      
+      .initial-title {
+        font-size: 2.2em;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #080727;
+        letter-spacing: -0.5px;
+      }
+      
+      .initial-subtitle {
+        font-size: 1.1em;
+        color: #666;
+        margin-bottom: 30px;
+      }
+      
+      .initial-progress {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      
+      .initial-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .initial-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #F0855A, #e0744a);
+        border-radius: 3px;
+        animation: progressFill 2s ease-in-out infinite;
+        position: relative;
+      }
+      
+      .initial-progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: progressShine 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes progressFill {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+      }
+      
+      @keyframes progressShine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      
+      .initial-features {
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        text-align: left;
+      }
+      
+      .initial-feature {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e0e0e0;
+      }
+      
+      .initial-feature h3 {
+        color: #080727;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      
+      .initial-feature p {
+        color: #666;
+        font-size: 0.9em;
+        line-height: 1.5;
+      }
+      
+      @media (max-width: 768px) {
+        .initial-features {
+          grid-template-columns: 1fr;
+        }
+        
+        .initial-title {
+          font-size: 1.8em;
+        }
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <noscript>
+      <div style="text-align: center; padding: 50px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <h1 style="color: #080727; margin-bottom: 20px;">TOLcreatives</h1>
+        <p style="color: #666; margin-bottom: 30px;">You need to enable JavaScript to use TOLcreatives AI Ad Generator.</p>
+        <p style="color: #F0855A; font-weight: 500;">Please enable JavaScript in your browser settings and refresh the page.</p>
+      </div>
+    </noscript>
+    
+    <!-- Initial Loading State -->
+    <div id="root">
+      <div class="initial-loading">
+        <div class="initial-logo">TOL</div>
+        <h1 class="initial-title">TOLcreatives</h1>
+        <p class="initial-subtitle">AI-Powered Ad Generator</p>
+        <div class="initial-progress">
+          <div class="initial-progress-bar">
+            <div class="initial-progress-fill"></div>
+          </div>
+        </div>
+        
+        <div class="initial-features">
+          <div class="initial-feature">
+            <h3>AI-Powered Generation</h3>
+            <p>Transform your product images into stunning, professional ads using advanced AI technology.</p>
+          </div>
+          <div class="initial-feature">
+            <h3>Instant Delivery</h3>
+            <p>Get your custom ads delivered directly to your email in just minutes, not hours.</p>
+          </div>
+          <div class="initial-feature">
+            <h3>Professional Quality</h3>
+            <p>High-quality, ready-to-use advertisements perfect for social media and marketing campaigns.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
