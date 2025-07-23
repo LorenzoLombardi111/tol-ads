@@ -151,19 +151,47 @@ function Dashboard({ userId }) {
       {/* Section Divider */}
       <div className="section-divider"></div>
 
-      <div className="dashboard-header">
-        <h2>Your Ad History</h2>
-        <button onClick={fetchAdHistory} className="refresh-btn">
-          Refresh
-        </button>
+      {/* Stats Cards - Right under credits */}
+      <div className="stats-cards">
+        <div className="stat-card total">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              📊
+            </div>
+            <div className="stat-info">
+              <h3>{ads.length}</h3>
+              <p>Total Ads Generated</p>
+            </div>
+          </div>
+        </div>
+        <div className="stat-card completed">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              ✅
+            </div>
+            <div className="stat-info">
+              <h3>{ads.filter(ad => ad.status === 'completed').length}</h3>
+              <p>Completed</p>
+            </div>
+          </div>
+        </div>
+        <div className="stat-card pending">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              ⏳
+            </div>
+            <div className="stat-info">
+              <h3>{ads.filter(ad => ad.status === 'pending').length}</h3>
+              <p>In Progress</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {error && (
-        <div className="error-banner">
-          {error}
-        </div>
-      )}
+      {/* Section Divider */}
+      <div className="section-divider"></div>
 
+      {/* Search and Filters Section */}
       <div className="filters-section">
         <div className="search-box">
           <input
@@ -203,44 +231,19 @@ function Dashboard({ userId }) {
       {/* Section Divider */}
       <div className="section-divider"></div>
 
-      <div className="stats-cards">
-        <div className="stat-card total">
-          <div className="stat-card-content">
-            <div className="stat-icon">
-              📊
-            </div>
-            <div className="stat-info">
-              <h3>{ads.length}</h3>
-              <p>Total Ads Generated</p>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card completed">
-          <div className="stat-card-content">
-            <div className="stat-icon">
-              ✅
-            </div>
-            <div className="stat-info">
-              <h3>{ads.filter(ad => ad.status === 'completed').length}</h3>
-              <p>Completed</p>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card pending">
-          <div className="stat-card-content">
-            <div className="stat-icon">
-              ⏳
-            </div>
-            <div className="stat-info">
-              <h3>{ads.filter(ad => ad.status === 'pending').length}</h3>
-              <p>In Progress</p>
-            </div>
-          </div>
-        </div>
+      {/* Your Ad History Section */}
+      <div className="dashboard-header">
+        <h2>Your Ad History</h2>
+        <button onClick={fetchAdHistory} className="refresh-btn">
+          Refresh
+        </button>
       </div>
 
-      {/* Section Divider */}
-      <div className="section-divider"></div>
+      {error && (
+        <div className="error-banner">
+          {error}
+        </div>
+      )}
 
       {filteredAds.length === 0 ? (
         <div className="empty-state">
