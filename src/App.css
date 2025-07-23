@@ -447,8 +447,82 @@ h1 {
   animation: spin 1s linear infinite;
 }
 
-/* Secondary Reset Button */
-.reset-button {
+/* Generate Button in Generate New Ad Section */
+.generate-btn {
+  background: linear-gradient(135deg, var(--slate-800) 0%, var(--slate-700) 100%);
+  color: var(--white);
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  border: 2px solid var(--slate-600);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  transition: var(--transition);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 200px;
+  justify-content: center;
+  margin: var(--space-8) auto;
+  width: 100%;
+  max-width: 300px;
+}
+
+.generate-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.generate-btn:hover::before {
+  opacity: 1;
+}
+
+.generate-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-600) 100%);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl);
+  color: var(--white);
+  border-color: var(--primary-color);
+}
+
+.generate-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.generate-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(240, 133, 90, 0.3), var(--shadow-lg);
+}
+
+.generate-btn:disabled {
+  background: linear-gradient(135deg, var(--slate-300) 0%, var(--slate-400) 100%);
+  color: var(--slate-500);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+  opacity: 0.7;
+  border-color: var(--slate-300);
+}
+
+.generate-btn:disabled::before {
+  display: none;
+}
+
+/* Reset Button in Success Section */
+.reset-btn {
   background: linear-gradient(135deg, var(--slate-100) 0%, var(--slate-200) 100%);
   color: var(--slate-700);
   padding: var(--space-3) var(--space-6);
@@ -463,9 +537,11 @@ h1 {
   letter-spacing: 0.3px;
   min-width: 120px;
   justify-content: center;
+  margin: var(--space-4) auto;
+  display: block;
 }
 
-.reset-button:hover {
+.reset-btn:hover {
   background: linear-gradient(135deg, var(--slate-200) 0%, var(--slate-300) 100%);
   border-color: var(--slate-400);
   transform: translateY(-2px);
@@ -473,7 +549,7 @@ h1 {
   color: var(--slate-800);
 }
 
-.reset-button:focus {
+.reset-btn:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.2), var(--shadow-md);
 }
@@ -741,6 +817,17 @@ h1 {
     padding: var(--space-4) var(--space-8);
   }
   
+  .generate-btn {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-base);
+    max-width: 250px;
+  }
+  
+  .reset-btn {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-sm);
+  }
+  
   .ads-grid {
     grid-template-columns: 1fr;
     gap: var(--space-4);
@@ -793,6 +880,17 @@ h1 {
     padding: var(--space-2) var(--space-4);
     font-size: var(--text-sm);
     min-width: auto;
+  }
+  
+  .generate-btn {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-sm);
+    max-width: 200px;
+  }
+  
+  .reset-btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
   }
 }
 
