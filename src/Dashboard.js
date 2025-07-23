@@ -198,17 +198,38 @@ function Dashboard({ userId }) {
       </div>
 
       <div className="stats-cards">
-        <div className="stat-card">
-          <h3>{ads.length}</h3>
-          <p>Total Ads Generated</p>
+        <div className="stat-card total">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              📊
+            </div>
+            <div className="stat-info">
+              <h3>{ads.length}</h3>
+              <p>Total Ads Generated</p>
+            </div>
+          </div>
         </div>
-        <div className="stat-card">
-          <h3>{ads.filter(ad => ad.status === 'completed').length}</h3>
-          <p>Completed</p>
+        <div className="stat-card completed">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              ✅
+            </div>
+            <div className="stat-info">
+              <h3>{ads.filter(ad => ad.status === 'completed').length}</h3>
+              <p>Completed</p>
+            </div>
+          </div>
         </div>
-        <div className="stat-card">
-          <h3>{ads.filter(ad => ad.status === 'pending').length}</h3>
-          <p>In Progress</p>
+        <div className="stat-card pending">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              ⏳
+            </div>
+            <div className="stat-info">
+              <h3>{ads.filter(ad => ad.status === 'pending').length}</h3>
+              <p>In Progress</p>
+            </div>
+          </div>
         </div>
       </div>
 
