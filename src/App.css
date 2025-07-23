@@ -354,12 +354,12 @@ h1 {
 
 /* Premium Generate Ads Button - Primary Action */
 .generate-button {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, var(--slate-800) 0%, var(--slate-700) 100%);
   color: var(--white);
   padding: var(--space-4) var(--space-8);
   font-size: var(--text-lg);
   font-weight: var(--font-bold);
-  border: none;
+  border: 2px solid var(--slate-600);
   border-radius: var(--radius-xl);
   cursor: pointer;
   display: flex;
@@ -373,30 +373,30 @@ h1 {
   letter-spacing: 0.5px;
   min-width: 200px;
   justify-content: center;
-  border: 2px solid transparent;
 }
 
 .generate-button::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.6s ease;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .generate-button:hover::before {
-  left: 100%;
+  opacity: 1;
 }
 
 .generate-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, #d0653a 100%);
+  background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-600) 100%);
   transform: translateY(-3px);
   box-shadow: var(--shadow-xl);
   color: var(--white);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary-color);
 }
 
 .generate-button:active:not(:disabled) {
@@ -426,11 +426,11 @@ h1 {
 
 /* Loading State */
 .generate-button.loading {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, var(--slate-800) 0%, var(--slate-700) 100%);
   color: var(--white);
   cursor: wait;
   position: relative;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary-color);
 }
 
 .generate-button.loading::after {
@@ -442,7 +442,7 @@ h1 {
   width: 20px;
   height: 20px;
   border: 2px solid transparent;
-  border-top: 2px solid var(--white);
+  border-top: 2px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
