@@ -148,6 +148,9 @@ function Dashboard({ userId }) {
         </button>
       </div>
 
+      {/* Section Divider */}
+      <div className="section-divider"></div>
+
       <div className="dashboard-header">
         <h2>Your Ad History</h2>
         <button onClick={fetchAdHistory} className="refresh-btn">
@@ -197,6 +200,9 @@ function Dashboard({ userId }) {
         </div>
       </div>
 
+      {/* Section Divider */}
+      <div className="section-divider"></div>
+
       <div className="stats-cards">
         <div className="stat-card total">
           <div className="stat-card-content">
@@ -232,6 +238,9 @@ function Dashboard({ userId }) {
           </div>
         </div>
       </div>
+
+      {/* Section Divider */}
+      <div className="section-divider"></div>
 
       {filteredAds.length === 0 ? (
         <div className="empty-state">
