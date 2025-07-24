@@ -25,7 +25,7 @@ const LandingPage = () => {
         <div className="hero-container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Copy Competitors for $1,
+              <span className="main-emphasis">Copy Competitors for</span> <span className="price-highlight">$1,</span>
               <span className="highlight"> Start For Free</span>
             </h1>
             <p className="hero-subtitle">

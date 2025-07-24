@@ -88,13 +88,6 @@
 }
 
 .hero-title {
-  font-size: 4.2rem;
-  font-weight: 900;
-  line-height: 1.05;
-  margin-bottom: 2rem;
-  color: #080727;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 4px rgba(8, 7, 39, 0.1);
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.1;
@@ -103,17 +96,6 @@
 }
 
 .highlight {
-  background: linear-gradient(135deg, #F0855A 0%, #FF6B6B 50%, #4ECDC4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: block;
-  font-weight: 900;
-  font-size: 1.1em;
-  text-shadow: none;
-  animation: gradientShift 3s ease-in-out infinite;
-  position: relative;
-  margin-top: 0.5rem;
   color: #F0855A;
   display: block;
 }
@@ -423,13 +405,6 @@
   }
 
   .hero-title {
-  font-size: 4.2rem;
-  font-weight: 900;
-  line-height: 1.05;
-  margin-bottom: 2rem;
-  color: #080727;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 4px rgba(8, 7, 39, 0.1);
     font-size: 2.5rem;
   }
 
@@ -475,13 +450,6 @@
 
 @media (max-width: 480px) {
   .hero-title {
-  font-size: 4.2rem;
-  font-weight: 900;
-  line-height: 1.05;
-  margin-bottom: 2rem;
-  color: #080727;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 4px rgba(8, 7, 39, 0.1);
     font-size: 2rem;
   }
 
@@ -498,81 +466,3 @@
     font-size: 0.8rem;
   }
 } 
-/* Enhanced Typography Styles */
-@keyframes gradientShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Price styling */
-.hero-title .price-highlight {
-  color: #FF6B6B;
-  font-weight: 900;
-  font-size: 1.15em;
-  text-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
-  animation: priceGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes priceGlow {
-  0% {
-    text-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
-  }
-  100% {
-    text-shadow: 0 4px 16px rgba(255, 107, 107, 0.6);
-  }
-}
-
-/* Main headline emphasis */
-.hero-title .main-emphasis {
-  font-size: 1.2em;
-  font-weight: 900;
-  color: #080727;
-  text-shadow: 0 1px 3px rgba(8, 7, 39, 0.2);
-}
-
-/* Responsive typography improvements */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 3rem;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-  }
-  
-  .hero-title .main-emphasis {
-    font-size: 1.15em;
-  }
-  
-  .hero-title .price-highlight {
-    font-size: 1.1em;
-  }
-  
-  .highlight {
-    font-size: 1.05em;
-    margin-top: 0.3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2.5rem;
-    line-height: 1.15;
-    margin-bottom: 1.2rem;
-  }
-  
-  .hero-title .main-emphasis {
-    font-size: 1.1em;
-  }
-  
-  .hero-title .price-highlight {
-    font-size: 1.05em;
-  }
-  
-  .highlight {
-    font-size: 1em;
-    margin-top: 0.2rem;
-  }
-}
