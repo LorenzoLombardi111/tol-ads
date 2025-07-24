@@ -55,6 +55,26 @@ const SignUp = ({ onSignUpSuccess }) => {
       }
 
       if (data.user && !data.user.email_confirmed_at) {
+        // Create credits for the new user (secure server-side approach)
+        try {
+          const { error: creditError } = await supabase
+            .from('user_credits')
+            .insert([
+              {
+                user_id: data.user.id,
+                credits_available: 2,
+                credits_used: 0
+              }
+            ])
+            .single();
+
+          if (creditError && !creditError.message.includes('duplicate key')) {
+            console.error('Credit creation error:', creditError);
+          }
+        } catch (creditError) {
+          console.log('Credit creation failed (might already exist):', creditError);
+        }
+        
         setSuccess('Please check your email to confirm your account!');
         // Optionally redirect to login after a delay
         setTimeout(() => {
@@ -63,6 +83,26 @@ const SignUp = ({ onSignUpSuccess }) => {
           }
         }, 3000);
       } else {
+        // Create credits for the new user (secure server-side approach)
+        try {
+          const { error: creditError } = await supabase
+            .from('user_credits')
+            .insert([
+              {
+                user_id: data.user.id,
+                credits_available: 2,
+                credits_used: 0
+              }
+            ])
+            .single();
+
+          if (creditError && !creditError.message.includes('duplicate key')) {
+            console.error('Credit creation error:', creditError);
+          }
+        } catch (creditError) {
+          console.log('Credit creation failed (might already exist):', creditError);
+        }
+        
         setSuccess('Account created successfully!');
         if (onSignUpSuccess) {
           onSignUpSuccess();
