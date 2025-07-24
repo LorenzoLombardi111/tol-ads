@@ -82,9 +82,12 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
           
           <div className="plans-grid">
             {plans.map((plan) => (
-              <div key={plan.id} className="plan-card">
+              <div key={plan.id} className={`plan-card ${plan.name === 'Pro Pack' ? 'popular' : ''}`}>
                 <div className="plan-header">
                   <h4>{plan.name}</h4>
+                  {plan.name === 'Pro Pack' && (
+                    <div className="popular-badge">Most Popular</div>
+                  )}
                 </div>
                 
                 <div className="plan-body">
@@ -101,17 +104,24 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
                   </div>
                   
                   {/* Discount Information */}
-                  {plan.name === 'Enterprise Pack' && (
+                  {plan.name === 'Pro Pack' && (
                     <div className="discount-badge">
-                      <span className="discount-text">7.5% OFF</span>
-                      <span className="savings-text">Save $7.50</span>
+                      <span className="discount-text">5% OFF</span>
+                      <span className="savings-text">Save $5.00</span>
                     </div>
                   )}
                   
-                  {plan.name === 'Ultra Pack' && (
+                  {plan.name === 'Elite Pack' && (
+                    <div className="discount-badge">
+                      <span className="discount-text">7.5% OFF</span>
+                      <span className="savings-text">Save $38.00</span>
+                    </div>
+                  )}
+                  
+                  {plan.name === 'Enterprise Pack' && (
                     <div className="discount-badge">
                       <span className="discount-text">10% OFF</span>
-                      <span className="savings-text">Save $100</span>
+                      <span className="savings-text">Save $100.00</span>
                     </div>
                   )}
                 </div>
