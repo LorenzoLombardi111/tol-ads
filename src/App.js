@@ -497,14 +497,14 @@ function DashboardApp({ userData, onLogout }) {
           <div className="image-format-disclaimer">
             <p>
               <span className="disclaimer-icon">ℹ️</span>
-              <strong>Recommended:</strong> Use PNG images for best results. 
+              <strong>Recommended:</strong> Use JPG images for best results. 
               <a 
                 href="https://convertio.co/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="convert-link"
               >
-                Convert your images to PNG here
+                Convert your images to JPG here
               </a>
             </p>
           </div>
