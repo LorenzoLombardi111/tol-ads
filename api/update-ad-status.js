@@ -6,6 +6,12 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// Add logging to debug
+console.log('Environment variables:', {
+  supabaseUrl: process.env.REACT_APP_SUPABASE_URL || process.env.SUPABASE_URL,
+  hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY
+});
+
 module.exports = async (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
