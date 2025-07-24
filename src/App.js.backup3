@@ -494,20 +494,6 @@ function DashboardApp({ userData, onLogout }) {
         ) : (
         <>
           <p className="subtitle">Drag & drop or click to upload images</p>
-          <div className="image-format-disclaimer">
-            <p>
-              <span className="disclaimer-icon">ℹ️</span>
-              <strong>Recommended:</strong> Use PNG images for best results. 
-              <a 
-                href="https://convertio.co/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="convert-link"
-              >
-                Convert your images to PNG here
-              </a>
-            </p>
-          </div>
           
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
