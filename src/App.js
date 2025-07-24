@@ -1,4 +1,5 @@
 import './App.css';
+import './components/StaticStats.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
