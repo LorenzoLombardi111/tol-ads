@@ -47,11 +47,11 @@ const LandingPage = () => {
               </a>
             </div>
             <div className="hero-stats">
-              <div className="stat">
-                <div className="stat-icon">📊</div>
                 <span className="stat-number">10,000+</span>
                 <span className="stat-label">Ads Generated</span>
               </div>
+                <span className="stat-number">$1</span>
+                <span className="stat-label">Per Ad</span>
               </div>
             </div>
           </div>
