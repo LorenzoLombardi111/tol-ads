@@ -82,12 +82,9 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
           
           <div className="plans-grid">
             {plans.map((plan) => (
-              <div key={plan.id} className={`plan-card ${plan.name === 'Pro Pack' ? 'popular' : ''}`}>
+              <div key={plan.id} className="plan-card">
                 <div className="plan-header">
                   <h4>{plan.name}</h4>
-                  {plan.name === 'Pro Pack' && (
-                    <div className="popular-badge">Most Popular</div>
-                  )}
                 </div>
                 
                 <div className="plan-body">
@@ -104,13 +101,6 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
                   </div>
                   
                   {/* Discount Information */}
-                  {plan.name === 'Pro Pack' && (
-                    <div className="discount-badge">
-                      <span className="discount-text">5% OFF</span>
-                      <span className="savings-text">Save $2.50</span>
-                    </div>
-                  )}
-                  
                   {plan.name === 'Enterprise Pack' && (
                     <div className="discount-badge">
                       <span className="discount-text">7.5% OFF</span>
