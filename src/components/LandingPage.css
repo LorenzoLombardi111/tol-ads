@@ -1167,7 +1167,7 @@
   }
 }
 
-/* Simple hero stats styles */
+/* Completely static hero stats - no animations */
 .hero-stats {
   display: flex;
   gap: 2rem;
