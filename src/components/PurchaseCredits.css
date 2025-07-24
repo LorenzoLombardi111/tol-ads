@@ -85,24 +85,18 @@
   margin-right: auto;
 }
 
-/* Bottom row with 2 centered cards */
-.plans-grid::after {
-  content: '';
-  grid-column: 2;
-  grid-row: 2;
-}
-
+/* Bottom row with 2 wider cards */
 .plans-grid .plan-card:nth-child(4) {
-  grid-column: 1;
+  grid-column: 1 / 2;
   grid-row: 2;
-  justify-self: end;
+  justify-self: stretch;
   margin-right: 5px;
 }
 
 .plans-grid .plan-card:nth-child(5) {
-  grid-column: 3;
+  grid-column: 2 / 4;
   grid-row: 2;
-  justify-self: start;
+  justify-self: stretch;
   margin-left: 5px;
 }
 
