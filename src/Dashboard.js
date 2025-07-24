@@ -141,7 +141,10 @@ function Dashboard({ userId }) {
       <div className="credits-section">
         <CreditsDisplay userId={userId} />
         <button 
-          onClick={() => setShowPurchaseModal(true)}
+          onClick={() => {
+            console.log('Opening purchase modal...');
+            setShowPurchaseModal(true);
+          }}
           className="purchase-credits-btn"
         >
           Buy More Credits
@@ -333,11 +336,17 @@ function Dashboard({ userId }) {
 
       {/* Purchase Credits Modal */}
       {showPurchaseModal && (
-        <PurchaseCredits
-          userId={userId}
-          onPurchaseSuccess={handlePurchaseSuccess}
-          onClose={() => setShowPurchaseModal(false)}
-        />
+        <>
+          {console.log('Rendering purchase modal...')}
+          <PurchaseCredits
+            userId={userId}
+            onPurchaseSuccess={handlePurchaseSuccess}
+            onClose={() => {
+              console.log('Closing purchase modal...');
+              setShowPurchaseModal(false);
+            }}
+          />
+        </>
       )}
     </div>
   );
