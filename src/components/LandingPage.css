@@ -1167,6 +1167,87 @@
   }
 }
 
+/* Simple hero stats styles */
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.stat {
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #F0855A;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Simple responsive adjustments */
+@media (max-width: 768px) {
+  .hero-stats {
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .stat {
+    padding: 1.25rem 1.5rem;
+    min-width: 140px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .stat-icon {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-stats {
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+  
+  .stat {
+    padding: 1rem 1.25rem;
+    min-width: 120px;
+  }
+  
+  .stat-number {
+    font-size: 1.8rem;
+  }
+  
+  .stat-icon {
+    font-size: 1.1rem;
+  }
+}
+
 /* Completely static hero stats - no animations */
 .hero-stats {
   display: flex;
