@@ -135,6 +135,27 @@
 }
 
 .cta-primary {
+  background: linear-gradient(135deg, #F0855A 0%, #FF6B6B 50%, #e0744a 100%);
+  color: white;
+  padding: 1.25rem 2.5rem;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 
+    0 8px 32px rgba(240, 133, 90, 0.4),
+    0 4px 16px rgba(255, 107, 107, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: inherit;
   background: #F0855A;
   color: white;
   padding: 1rem 2rem;
@@ -148,17 +169,48 @@
 }
 
 .cta-primary:hover {
+  background: linear-gradient(135deg, #e0744a 0%, #F0855A 50%, #FF6B6B 100%);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 16px 48px rgba(240, 133, 90, 0.5),
+    0 8px 24px rgba(255, 107, 107, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.8px;
   background: #e0744a;
   transform: translateY(-3px);
   box-shadow: 0 8px 30px rgba(240, 133, 90, 0.4);
 }
 
 .cta-primary.large {
+  padding: 1.5rem 3rem;
+  font-size: 1.3rem;
+  border-radius: 20px;
+  box-shadow: 
+    0 12px 40px rgba(240, 133, 90, 0.5),
+    0 6px 20px rgba(255, 107, 107, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   padding: 1.25rem 2.5rem;
   font-size: 1.2rem;
 }
 
 .cta-secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #080727;
+  padding: 0.875rem 1.75rem;
+  border: 2px solid rgba(8, 7, 39, 0.2);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 0.3px;
   background: transparent;
   color: #080727;
   padding: 0.75rem 1.5rem;
@@ -170,11 +222,25 @@
 }
 
 .cta-secondary:hover {
+  background: rgba(8, 7, 39, 0.95);
+  color: white;
+  border-color: rgba(8, 7, 39, 0.8);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.5px;
   background: #080727;
   color: white;
 }
 
 .cta-secondary.large {
+  padding: 1.125rem 2.25rem;
+  font-size: 1.1rem;
+  border-radius: 14px;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   padding: 1rem 2rem;
   font-size: 1.1rem;
 }
@@ -850,5 +916,108 @@
   .landing-page::after {
     background-size: 30px 30px, 30px 30px;
     background-position: 0 0, 15px 15px;
+  }
+}
+
+/* Enhanced CTA Focus States */
+.cta-primary:focus {
+  outline: none;
+  box-shadow: 
+    0 8px 32px rgba(240, 133, 90, 0.4),
+    0 4px 16px rgba(255, 107, 107, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 0 4px rgba(240, 133, 90, 0.3);
+}
+
+.cta-secondary:focus {
+  outline: none;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 0 4px rgba(8, 7, 39, 0.2);
+}
+
+/* CTA Button Active States */
+.cta-primary:active {
+  transform: translateY(-2px) scale(1.02);
+  transition: all 0.1s ease;
+}
+
+.cta-secondary:active {
+  transform: translateY(-1px) scale(1.01);
+  transition: all 0.1s ease;
+}
+
+/* Enhanced Hero CTA Section */
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Button Glow Animation */
+@keyframes buttonGlow {
+  0%, 100% {
+    box-shadow: 
+      0 8px 32px rgba(240, 133, 90, 0.4),
+      0 4px 16px rgba(255, 107, 107, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 12px 40px rgba(240, 133, 90, 0.6),
+      0 6px 20px rgba(255, 107, 107, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
+.cta-primary {
+  animation: buttonGlow 3s ease-in-out infinite;
+}
+
+/* Responsive Button Adjustments */
+@media (max-width: 768px) {
+  .cta-primary {
+    padding: 1.125rem 2.25rem;
+    font-size: 1.1rem;
+    border-radius: 14px;
+  }
+  
+  .cta-secondary {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+  
+  .cta-primary.large {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .cta-secondary.large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: 12px;
+  }
+  
+  .cta-secondary {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+  
+  .hero-cta {
+    gap: 1rem;
+    margin-bottom: 2.5rem;
   }
 }
