@@ -25,9 +25,9 @@
   position: relative;
   background: var(--color-main);
   border-radius: 12px;
-  max-width: 700px;
+  max-width: 650px;
   width: 100%;
-  max-height: 85vh;
+  max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   z-index: 10000;
@@ -66,28 +66,56 @@
 }
 
 .modal-body {
-  padding: 16px;
+  padding: 14px;
 }
 
 .modal-body p {
   color: var(--color-dark-blue);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   text-align: center;
 }
 
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Bottom row with 2 centered cards */
+.plans-grid::after {
+  content: '';
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.plans-grid .plan-card:nth-child(4) {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: end;
+  margin-right: 5px;
+}
+
+.plans-grid .plan-card:nth-child(5) {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: start;
+  margin-left: 5px;
 }
 
 .plan-card {
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  padding: 15px;
+  padding: 12px 10px;
   text-align: center;
   transition: all 0.3s ease;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .plan-card:hover {
@@ -101,20 +129,20 @@
 }
 
 .plan-header h4 {
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   color: var(--color-dark-blue);
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .popular-badge {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: -6px;
+  right: -6px;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  padding: 3px 6px;
-  border-radius: 10px;
-  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 8px;
+  font-size: 8px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -128,46 +156,46 @@
 }
 
 .credits-amount {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: var(--color-dark-blue);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .credits-amount span {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--color-terra);
   display: block;
   font-weight: normal;
 }
 
 .price {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: var(--color-terra);
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .price-per-credit {
-  font-size: 11px;
+  font-size: 10px;
   color: #666;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .purchase-btn {
   background: var(--color-terra);
   color: white;
   border: none;
-  padding: 10px 16px;
+  padding: 8px 12px;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
-  font-size: 13px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   transition: background-color 0.3s ease;
 }
 
@@ -204,9 +232,9 @@
 .discount-badge {
   background: linear-gradient(135deg, #ff6b6b, #ee5a24);
   color: white;
-  padding: 6px 10px;
-  border-radius: 16px;
-  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-top: 6px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
   animation: discountPulse 2s ease-in-out infinite;
@@ -215,13 +243,13 @@
 .discount-text {
   display: block;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 10px;
   margin-bottom: 1px;
 }
 
 .savings-text {
   display: block;
-  font-size: 10px;
+  font-size: 9px;
   opacity: 0.9;
 }
 
@@ -242,6 +270,15 @@
   
   .plans-grid {
     grid-template-columns: 1fr;
+    max-width: none;
+  }
+  
+  .plans-grid .plan-card:nth-child(4),
+  .plans-grid .plan-card:nth-child(5) {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: stretch;
+    margin: 0;
   }
   
   .modal-content {
