@@ -30,6 +30,13 @@ const SignUp = ({ onSignUpSuccess }) => {
       return;
     }
 
+    // Check if Supabase is properly configured
+    if (!process.env.REACT_APP_SUPABASE_URL || !process.env.REACT_APP_SUPABASE_ANON_KEY) {
+      setError('Application configuration error. Please contact support.');
+      console.error('Missing Supabase environment variables');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setSuccess('');
@@ -63,7 +70,15 @@ const SignUp = ({ onSignUpSuccess }) => {
       }
     } catch (error) {
       console.error('Sign up error:', error);
-      setError(error.message || 'Failed to create account');
+      
+      // Provide more specific error messages
+      if (error.message.includes('Invalid API key')) {
+        setError('Configuration error. Please contact support.');
+      } else if (error.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        setError(error.message || 'Failed to create account');
+      }
     } finally {
       setLoading(false);
     }

@@ -1,46 +1,64 @@
--- Fix RLS Policy Recursion Issue
+-- Fix RLS Policies for User Sign Up
 -- Run this in your Supabase SQL Editor
 
--- Drop existing policies that might be causing recursion
-DROP POLICY IF EXISTS "Admins can view user roles" ON user_roles;
+-- 1. Drop existing policies that might be causing issues
 DROP POLICY IF EXISTS "Users can view own credits" ON user_credits;
 DROP POLICY IF EXISTS "Users can view own transactions" ON credit_transactions;
-DROP POLICY IF EXISTS "Anyone can view active payment plans" ON payment_plans;
 
--- Create simpler policies without recursion
+-- 2. Create proper RLS policies for user_credits table
 CREATE POLICY "Users can view own credits" ON user_credits
     FOR SELECT USING (auth.uid() = user_id);
 
+CREATE POLICY "Users can insert own credits" ON user_credits
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own credits" ON user_credits
+    FOR UPDATE USING (auth.uid() = user_id);
+
+-- 3. Create proper RLS policies for credit_transactions table
 CREATE POLICY "Users can view own transactions" ON credit_transactions
     FOR SELECT USING (auth.uid() = user_id);
 
-CREATE POLICY "Anyone can view active payment plans" ON payment_plans
-    FOR SELECT USING (is_active = true);
+CREATE POLICY "Users can insert own transactions" ON credit_transactions
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
--- Create a simpler admin policy that doesn't cause recursion
-CREATE POLICY "Allow all operations on user_roles" ON user_roles
-    FOR ALL USING (true);
+-- 4. Ensure the trigger function has proper permissions
+-- This is crucial for the automatic creation of user_credits records
+GRANT USAGE ON SCHEMA public TO authenticated;
+GRANT ALL ON user_credits TO authenticated;
+GRANT ALL ON credit_transactions TO authenticated;
 
--- Grant initial credits to existing users
+-- 5. Recreate the trigger function with better error handling
+CREATE OR REPLACE FUNCTION create_user_credits()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    -- Check if user_credits record already exists
+    IF NOT EXISTS (SELECT 1 FROM user_credits WHERE user_id = NEW.id) THEN
+        INSERT INTO user_credits (user_id, credits_available, credits_used)
+        VALUES (NEW.id, 0, 0);
+    END IF;
+    RETURN NEW;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Log the error but don't fail the user creation
+        RAISE WARNING 'Failed to create user credits for user %: %', NEW.id, SQLERRM;
+        RETURN NEW;
+END;
+$$;
+
+-- 6. Drop and recreate the trigger
+DROP TRIGGER IF EXISTS trigger_create_user_credits ON auth.users;
+CREATE TRIGGER trigger_create_user_credits
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION create_user_credits();
+
+-- 7. Grant initial credits to any existing users without credits
 INSERT INTO user_credits (user_id, credits_available, credits_used)
-SELECT id, 10, 0
+SELECT id, 5, 0
 FROM auth.users
 WHERE id NOT IN (SELECT user_id FROM user_credits)
-ON CONFLICT (user_id) DO UPDATE SET
-    credits_available = user_credits.credits_available + 10,
-    updated_at = NOW();
-
--- Create transaction records for the initial credits
-INSERT INTO credit_transactions (user_id, transaction_type, credit_change, description)
-SELECT 
-    uc.user_id,
-    'admin_grant',
-    10,
-    'Welcome bonus credits'
-FROM user_credits uc
-WHERE uc.credits_available >= 10
-AND NOT EXISTS (
-    SELECT 1 FROM credit_transactions ct 
-    WHERE ct.user_id = uc.user_id 
-    AND ct.description = 'Welcome bonus credits'
-); 
+ON CONFLICT (user_id) DO NOTHING; 

@@ -1,0 +1,18 @@
+# Environment Variables Template for TOL Ads Generator
+# Copy this file to .env.local and fill in your actual values
+
+# Supabase Configuration (REQUIRED for sign up to work)
+REACT_APP_SUPABASE_URL=https://your-project-id.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+
+# Stripe Configuration (for payment functionality)
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+
+# N8N Webhook URL (for ad generation)
+REACT_APP_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/ad-generation
+
+# Instructions:
+# 1. Copy this file and rename it to .env.local
+# 2. Replace the placeholder values with your actual credentials
+# 3. Get your Supabase credentials from your Supabase project dashboard
+# 4. Restart your development server after creating .env.local 
