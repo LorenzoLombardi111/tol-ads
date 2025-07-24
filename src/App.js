@@ -159,6 +159,8 @@ function DashboardApp({ userData, onLogout }) {
   // Your existing states for ad generation
   const [productImage, setProductImage] = useState(null);
   const [inspirationImage, setInspirationImage] = useState(null);
+  const [productDescription, setProductDescription] = useState('');
+  const [productSize, setProductSize] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -299,6 +301,16 @@ function DashboardApp({ userData, onLogout }) {
       return;
     }
 
+    if (!productDescription.trim()) {
+      setError('Please enter a product description!');
+      return;
+    }
+
+    if (!productSize.trim()) {
+      setError('Please enter the product size in pixels!');
+      return;
+    }
+
     if (!validateEmail(userEmail)) {
       return;
     }
@@ -358,6 +370,8 @@ function DashboardApp({ userData, onLogout }) {
             user_id: userData.id,
             product_image_url: productImage,
             inspiration_image_url: inspirationImage,
+            product_description: productDescription,
+            product_size: productSize,
             email_sent_to: userEmail,
             status: 'pending'
           }
@@ -371,6 +385,8 @@ function DashboardApp({ userData, onLogout }) {
       const response = await axios.post(process.env.REACT_APP_N8N_WEBHOOK_URL, {
         productImage: productImage,
         inspirationImage: inspirationImage,
+        productDescription: productDescription,
+        productSize: productSize,
         userEmail: userEmail,
         userId: userData.id,
         userName: userData.name,
@@ -403,6 +419,8 @@ function DashboardApp({ userData, onLogout }) {
   const resetAll = () => {
     setProductImage(null);
     setInspirationImage(null);
+    setProductDescription('');
+    setProductSize('');
     setError('');
     setSuccess('');
     setSubmitted(false);
@@ -582,10 +600,36 @@ function DashboardApp({ userData, onLogout }) {
                 {emailError && <div className="email-error">{emailError}</div>}
               </div>
 
+              {/* Product Description Input */}
+              <div className="input-section">
+                <label htmlFor="productDescription" className="input-label">Product Description/Input</label>
+                <textarea
+                  id="productDescription"
+                  placeholder="Describe your product, target audience, style preferences, etc."
+                  value={productDescription}
+                  onChange={(e) => setProductDescription(e.target.value)}
+                  className="text-input"
+                  rows="4"
+                />
+              </div>
+
+              {/* Product Size Input */}
+              <div className="input-section">
+                <label htmlFor="productSize" className="input-label">Product Size (In pixels)</label>
+                <input
+                  type="text"
+                  id="productSize"
+                  placeholder="e.g., 1080x1080, 1200x630, 1920x1080"
+                  value={productSize}
+                  onChange={(e) => setProductSize(e.target.value)}
+                  className="text-input"
+                />
+              </div>
+
               {/* Generate Button */}
               <button 
                 onClick={generateAds}
-                disabled={loading || !productImage || !inspirationImage || !userEmail}
+                disabled={loading || !productImage || !inspirationImage || !userEmail || !productDescription.trim() || !productSize.trim()}
                 className="generate-btn"
               >
                 {loading ? 'Generating...' : 'Generate Ads'}
