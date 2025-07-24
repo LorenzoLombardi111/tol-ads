@@ -2,10 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from './supabaseClient';
 import Logo from './Logo';
 import CreditsDisplay from './components/CreditsDisplay';
-import PurchaseCredits from './components/PurchaseCredits';
 import './Dashboard.css';
 
-function Dashboard({ userId }) {
+function Dashboard({ userId, showPurchaseModal, setShowPurchaseModal }) {
   const [ads, setAds] = useState([]);
   const [filteredAds, setFilteredAds] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +12,6 @@ function Dashboard({ userId }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
-  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
 
   const fetchAdHistory = useCallback(async () => {
     try {
@@ -109,10 +107,7 @@ function Dashboard({ userId }) {
     return statusClasses[status] || 'status-badge';
   };
 
-  const handlePurchaseSuccess = () => {
-    setShowPurchaseModal(false);
-    // Optionally refresh credits display
-  };
+
 
   if (loading) {
     return (
@@ -334,20 +329,7 @@ function Dashboard({ userId }) {
         </div>
       )}
 
-      {/* Purchase Credits Modal */}
-      {showPurchaseModal && (
-        <>
-          {console.log('Rendering purchase modal...')}
-          <PurchaseCredits
-            userId={userId}
-            onPurchaseSuccess={handlePurchaseSuccess}
-            onClose={() => {
-              console.log('Closing purchase modal...');
-              setShowPurchaseModal(false);
-            }}
-          />
-        </>
-      )}
+
     </div>
   );
 }

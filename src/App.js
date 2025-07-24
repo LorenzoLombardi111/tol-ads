@@ -6,6 +6,7 @@ import Login from './Login';
 import SignUp from './components/SignUp';
 import Dashboard from './Dashboard';
 import LandingPage from './components/LandingPage';
+import PurchaseCredits from './components/PurchaseCredits';
 import Logo from './Logo';
 import { supabase } from './supabaseClient';
 
@@ -156,6 +157,9 @@ function DashboardApp({ userData, onLogout }) {
   // Navigation state
   const [currentView, setCurrentView] = useState('dashboard');
 
+  // Modal state
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+
   // Your existing states for ad generation
   const [productImage, setProductImage] = useState(null);
   const [inspirationImage, setInspirationImage] = useState(null);
@@ -176,6 +180,12 @@ function DashboardApp({ userData, onLogout }) {
       setUserEmail(userData.email);
     }
   }, [userData]);
+
+  // Handle purchase success
+  const handlePurchaseSuccess = () => {
+    setShowPurchaseModal(false);
+    // Optionally refresh credits or show success message
+  };
 
   // Email validation
   const validateEmail = (email) => {
@@ -476,7 +486,11 @@ function DashboardApp({ userData, onLogout }) {
 
       <div className="main-content">
         {currentView === 'dashboard' ? (
-          <Dashboard userId={userData.id} />
+          <Dashboard 
+            userId={userData.id} 
+            showPurchaseModal={showPurchaseModal}
+            setShowPurchaseModal={setShowPurchaseModal}
+          />
         ) : (
         <>
           <p className="subtitle">Drag & drop or click to upload images</p>
@@ -648,6 +662,15 @@ function DashboardApp({ userData, onLogout }) {
         </>
         )}
       </div>
+
+      {/* Purchase Credits Modal - Rendered outside main content for proper overlay */}
+      {showPurchaseModal && (
+        <PurchaseCredits
+          userId={userData.id}
+          onPurchaseSuccess={handlePurchaseSuccess}
+          onClose={() => setShowPurchaseModal(false)}
+        />
+      )}
     </div>
   );
 }
