@@ -62,7 +62,7 @@ const SignUp = ({ onSignUpSuccess }) => {
             .insert([
               {
                 user_id: data.user.id,
-                credits_available: 2,
+                credits_available: 5,
                 credits_used: 0
               }
             ])
@@ -90,7 +90,7 @@ const SignUp = ({ onSignUpSuccess }) => {
             .insert([
               {
                 user_id: data.user.id,
-                credits_available: 2,
+                credits_available: 5,
                 credits_used: 0
               }
             ])
@@ -130,7 +130,7 @@ const SignUp = ({ onSignUpSuccess }) => {
         <div className="signup-header">
           <Logo size="medium" showText={true} />
           <h2>Create Your Account</h2>
-          <p>Start creating amazing ads today</p>
+          <p>Start creating amazing ads today with 5 free credits!</p>
         </div>
 
         <form onSubmit={handleSignUp} className="signup-form">
