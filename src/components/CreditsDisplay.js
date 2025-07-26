@@ -1,82 +1,46 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import './CreditsDisplay.css';
 
 const CreditsDisplay = ({ userId }) => {
-  console.log('CreditsDisplay component rendered with userId:', userId);
-  const [credits, setCredits] = useState(0);
+  const [creditAmount, setCreditAmount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  const fetchUserCredits = useCallback(async () => {
+  const fetchUserCredits = async (userId) => {
+    if (!userId) return;
+
     try {
-      console.log('Fetching credits for user:', userId);
       setLoading(true);
-      setError(null);
-
       const { data, error } = await supabase
         .from('user_credits')
         .select('credits_available')
         .eq('user_id', userId)
         .single();
 
-      console.log('Credits response:', { data, error });
-
-      if (error && error.code !== 'PGRST116') {
-        throw error;
+      if (error) {
+        console.error('Error fetching credits:', error);
+        setCreditAmount(0);
+      } else {
+        setCreditAmount(data?.credits_available || 0);
       }
-
-      const creditAmount = data?.credits_available || 0;
-      setCredits(creditAmount);
-      console.log('Credits loaded successfully:', creditAmount);
     } catch (err) {
       console.error('Error fetching credits:', err);
-      setError('Failed to load credits');
+      setCreditAmount(0);
     } finally {
       setLoading(false);
-      console.log('Credits loading finished');
     }
-  }, [userId]);
+  };
 
   useEffect(() => {
-    console.log('CreditsDisplay useEffect triggered with userId:', userId);
-    if (userId) {
-      console.log('Calling fetchUserCredits...');
-      fetchUserCredits();
-    } else {
-      console.log('No userId provided, skipping fetchUserCredits');
-    }
-  }, [userId, fetchUserCredits]);
-
-  if (loading) {
-    return (
-      <div className="credits-display loading">
-        <div className="credits-spinner">⟳</div>
-        <span>Loading...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="credits-display error">
-        <span>{error}</span>
-        <button onClick={fetchUserCredits}>Retry</button>
-      </div>
-    );
-  }
+    fetchUserCredits(userId);
+  }, [userId]);
 
   return (
     <div className="credits-display">
-      <div className="credits-icon">💎</div>
-      <div className="credits-info">
-        <span className="credits-count">{credits}</span>
-        <span className="credits-label">Credits</span>
-      </div>
-      {credits < 5 && (
-        <div className="low-credits-warning">
-          Running low on credits!
-        </div>
+      {loading ? (
+        <span>Loading credits...</span>
+      ) : (
+        <span>{creditAmount} credits available</span>
       )}
     </div>
   );
