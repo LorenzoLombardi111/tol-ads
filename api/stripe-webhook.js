@@ -20,6 +20,12 @@ export default async function handler(req, res) {
     return res.status(405).end('Method Not Allowed');
   }
 
+  // Check if webhook secret is configured
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error('❌ STRIPE_WEBHOOK_SECRET is not configured');
+    return res.status(500).json({ error: 'Webhook secret not configured' });
+  }
+
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -51,12 +57,10 @@ export default async function handler(req, res) {
       
       case 'payment_intent.succeeded':
         console.log('✅ Payment succeeded:', event.data.object.id);
-        // You can add additional logic here if needed
         break;
       
       case 'payment_intent.payment_failed':
         console.log('❌ Payment failed:', event.data.object.id);
-        // Handle failed payments if needed
         break;
       
       default:
@@ -98,9 +102,6 @@ async function handleSuccessfulPayment(session) {
     }
 
     console.log(`✅ Successfully added ${creditsAmount} credits to user ${userId}`);
-
-    // Optional: Send confirmation email or notification here
-    // await sendPurchaseConfirmationEmail(userId, creditsAmount);
 
   } catch (error) {
     console.error('❌ Error in handleSuccessfulPayment:', error);
