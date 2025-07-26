@@ -319,7 +319,7 @@ function DashboardApp({ userData, onLogout }) {
     }
 
     if (!productSize.trim()) {
-      setError('Please enter the product size in pixels!');
+      setError('Please enter the ad size in pixels!');
       return;
     }
 
@@ -643,9 +643,9 @@ function DashboardApp({ userData, onLogout }) {
                 />
               </div>
 
-              {/* Product Size Input */}
+              {/* Ad Size Input */}
               <div className="input-section">
-                <label htmlFor="productSize" className="input-label">Product Size (In pixels)</label>
+                <label htmlFor="productSize" className="input-label">Ad Size (In pixels)</label>
                 <input
                   type="text"
                   id="productSize"
