@@ -9,6 +9,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchPlans();
@@ -26,12 +27,14 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
       setPlans(data || []);
     } catch (err) {
       console.error('Error fetching plans:', err);
+      setError('Failed to load payment plans. Please refresh the page.');
     }
   };
 
   const handlePurchase = async (plan) => {
     setLoading(true);
     setSelectedPlan(plan.id);
+    setError('');
     
     try {
       const response = await fetch('/api/create-checkout-session', {
@@ -45,15 +48,23 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         }),
       });
 
+      const responseData = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        throw new Error(responseData.error || 'Failed to create checkout session');
       }
 
-      const { sessionId } = await response.json();
+      if (!responseData.sessionId) {
+        throw new Error('No session ID received from server');
+      }
       
       const stripe = await stripePromise;
+      if (!stripe) {
+        throw new Error('Stripe failed to load. Please check your internet connection.');
+      }
+
       const { error } = await stripe.redirectToCheckout({
-        sessionId,
+        sessionId: responseData.sessionId,
       });
 
       if (error) {
@@ -61,7 +72,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
       }
     } catch (err) {
       console.error('Purchase error:', err);
-      alert('Purchase failed. Please try again.');
+      setError(err.message || 'Purchase failed. Please try again.');
     } finally {
       setLoading(false);
       setSelectedPlan(null);
@@ -78,6 +89,12 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         </div>
         
         <div className="modal-body">
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+          
           <p>Choose a credit package to continue creating ads:</p>
           
           <div className="plans-grid">
@@ -143,6 +160,12 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
               </div>
             ))}
           </div>
+          
+          {plans.length === 0 && !error && (
+            <div className="no-plans-message">
+              No payment plans available. Please contact support.
+            </div>
+          )}
           
           <div className="secure-payment">
             <div className="secure-icon">🔒</div>
