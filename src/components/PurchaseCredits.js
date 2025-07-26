@@ -3,8 +3,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import { supabase } from '../supabaseClient';
 import './PurchaseCredits.css';
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
-
 const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -25,7 +23,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
 
       if (error) throw error;
       
-      // Deduplicate plans by name to handle any database duplicates
+      // Remove duplicates
       const uniquePlans = data ? data.reduce((acc, plan) => {
         const existingPlan = acc.find(p => p.name === plan.name);
         if (!existingPlan) {
@@ -47,12 +45,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
     setError('');
     
     try {
-      // Use the correct API endpoint for production
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? '/api/create-checkout-session'
-        : 'http://localhost:3000/api/create-checkout-session';
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,27 +56,27 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         }),
       });
 
-      const responseData = await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(responseData.error || `HTTP ${response.status}: Failed to create checkout session`);
+        throw new Error(data.error || `HTTP ${response.status}: Request failed`);
       }
 
-      if (!responseData.sessionId) {
-        throw new Error('No session ID received from server');
+      if (!data.sessionId) {
+        throw new Error('No session ID received');
       }
       
-      const stripe = await stripePromise;
+      const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
       if (!stripe) {
-        throw new Error('Stripe failed to load. Please check your internet connection.');
+        throw new Error('Stripe failed to load');
       }
 
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: responseData.sessionId,
+      const { error: stripeError } = await stripe.redirectToCheckout({
+        sessionId: data.sessionId,
       });
 
-      if (error) {
-        throw error;
+      if (stripeError) {
+        throw stripeError;
       }
     } catch (err) {
       console.error('Purchase error:', err);
@@ -135,7 +128,6 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
                     ${((plan.price_cents / 100) / plan.credits_included).toFixed(3)} per credit
                   </div>
                   
-                  {/* Discount Information */}
                   {plan.name === 'Pro Pack' && (
                     <div className="discount-badge">
                       <span className="discount-text">5% OFF</span>

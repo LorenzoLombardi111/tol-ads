@@ -1,9 +1,7 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
-  // Set CORS headers for browser requests
+  // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -22,34 +20,34 @@ export default async function handler(req, res) {
   try {
     const { planId, userId } = req.body;
 
-    console.log('Creating checkout session for:', { planId, userId });
-
-    // Validate required fields
+    // Basic validation
     if (!planId || !userId) {
-      console.error('Missing required fields:', { planId, userId });
       return res.status(400).json({ error: 'Missing planId or userId' });
     }
 
-    // Validate environment variables
-    if (!process.env.STRIPE_SECRET_KEY) {
-      console.error('STRIPE_SECRET_KEY is missing');
-      return res.status(500).json({ error: 'Stripe configuration error' });
+    // Check environment variables
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.REACT_APP_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!stripeSecretKey) {
+      console.error('STRIPE_SECRET_KEY missing');
+      return res.status(500).json({ error: 'Payment service not configured' });
     }
 
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('Supabase environment variables are missing');
-      return res.status(500).json({ error: 'Database configuration error' });
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Supabase credentials missing');
+      return res.status(500).json({ error: 'Database service not configured' });
     }
 
-    // Get plan details from Supabase
+    // Initialize Stripe
+    const stripe = new Stripe(stripeSecretKey);
+
+    // Initialize Supabase
     const { createClient } = require('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log('Fetching plan with ID:', planId);
-
+    // Get plan details
     const { data: plan, error: planError } = await supabase
       .from('payment_plans')
       .select('*')
@@ -59,12 +57,10 @@ export default async function handler(req, res) {
 
     if (planError || !plan) {
       console.error('Plan not found:', planError);
-      return res.status(404).json({ error: 'Plan not found or inactive' });
+      return res.status(404).json({ error: 'Payment plan not found' });
     }
 
-    console.log('Found plan:', plan.name, plan.credits_included, 'credits');
-
-    // Create Stripe checkout session
+    // Create checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -75,28 +71,27 @@ export default async function handler(req, res) {
               name: plan.name,
               description: `${plan.credits_included} ad generation credits`,
             },
-            unit_amount: plan.price_cents, // Stripe expects cents
+            unit_amount: plan.price_cents,
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'http://localhost:3000'}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'http://localhost:3000'}/dashboard?canceled=true`,
+      success_url: `${req.headers.origin || 'https://your-domain.vercel.app'}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin || 'https://your-domain.vercel.app'}/dashboard?canceled=true`,
       metadata: {
-        userId,
-        planId,
+        userId: userId,
+        planId: planId.toString(),
         creditsAmount: plan.credits_included.toString(),
       },
     });
 
-    console.log('Checkout session created successfully:', session.id);
     res.status(200).json({ sessionId: session.id });
   } catch (error) {
-    console.error('Checkout session error:', error);
+    console.error('Checkout error:', error);
     res.status(500).json({ 
       error: 'Failed to create checkout session',
-      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+      message: error.message 
     });
   }
 } 
