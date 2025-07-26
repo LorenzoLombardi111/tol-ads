@@ -230,8 +230,9 @@ function DashboardApp({ userData, onLogout }) {
       setError('File is too large! Please use images under 5MB.');
       return false;
     }
-    if (!file.type.startsWith('image/')) {
-      setError('Please upload an image file.');
+    // Check specifically for JPG/JPEG format
+    if (file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+      setError('Please upload a JPG/JPEG image file only.');
       return false;
     }
     setError('');
@@ -538,7 +539,7 @@ function DashboardApp({ userData, onLogout }) {
                       <p className="or">or</p>
                       <input 
                         type="file" 
-                        accept="image/*" 
+                        accept=".jpg,.jpeg,image/jpeg,image/jpg" 
                         onChange={handleProductImageUpload}
                         id="product-upload"
                         className="file-input"
@@ -583,7 +584,7 @@ function DashboardApp({ userData, onLogout }) {
                       <p className="or">or</p>
                       <input 
                         type="file" 
-                        accept="image/*" 
+                        accept=".jpg,.jpeg,image/jpeg,image/jpg" 
                         onChange={handleInspirationImageUpload}
                         id="inspiration-upload"
                         className="file-input"
