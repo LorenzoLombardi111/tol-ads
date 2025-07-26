@@ -1,59 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
+import Logo from './Logo';
 import CreditsDisplay from './components/CreditsDisplay';
 import PurchaseCredits from './components/PurchaseCredits';
 import './Dashboard.css';
 
-const Dashboard = ({ userId, showPurchaseModal, setShowPurchaseModal }) => {
-  const [adHistory, setAdHistory] = useState([]);
+function Dashboard({ userId, showPurchaseModal, setShowPurchaseModal }) {
+  const [ads, setAds] = useState([]);
+  const [filteredAds, setFilteredAds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
 
   useEffect(() => {
-    const fetchAdHistory = async () => {
-      if (!userId) return;
-
-      try {
-        setLoading(true);
-        setError(null);
-
-        const { data, error } = await supabase
-          .from('ad_history')
-          .select('*')
-          .eq('user_id', userId)
-          .order('created_at', { ascending: false });
-
-        if (error) {
-          throw error;
-        }
-
-        setAdHistory(data || []);
-      } catch (err) {
-        console.error('Error fetching ad history:', err);
-        setError('Failed to load ad history');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAdHistory();
   }, [userId]);
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed':
-        return 'status-completed';
-      case 'processing':
-        return 'status-processing';
-      case 'failed':
-        return 'status-failed';
-      default:
-        return 'status-pending';
+  const fetchAdHistory = async () => {
+    try {
+      setLoading(true);
+      setError('');
+
+      const { data, error } = await supabase
+        .from('ad_history')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setAds(data || []);
+      setFilteredAds(data || []);
+    } catch (err) {
+      console.error('Error fetching ad history:', err);
+      setError('Failed to load your ad history. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Apply filters
+  useEffect(() => {
+    let filtered = [...ads];
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(ad => 
+        ad.email_sent_to?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ad.status?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(ad => ad.status === statusFilter);
+    }
+
+    // Date filter
+    if (dateFilter !== 'all') {
+      const now = new Date();
+      const filterDate = new Date();
+
+      switch (dateFilter) {
+        case 'today':
+          filterDate.setHours(0, 0, 0, 0);
+          break;
+        case 'week':
+          filterDate.setDate(now.getDate() - 7);
+          break;
+        case 'month':
+          filterDate.setMonth(now.getMonth() - 1);
+          break;
+      }
+
+      filtered = filtered.filter(ad => 
+        new Date(ad.created_at) >= filterDate
+      );
+    }
+
+    setFilteredAds(filtered);
+  }, [searchTerm, statusFilter, dateFilter, ads]);
+
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -62,61 +94,231 @@ const Dashboard = ({ userId, showPurchaseModal, setShowPurchaseModal }) => {
     });
   };
 
-  const handlePurchaseClick = () => {
-    setShowPurchaseModal(true);
+  const getStatusBadge = (status) => {
+    const statusClasses = {
+      'completed': 'status-badge status-completed',
+      'pending': 'status-badge status-pending',
+      'failed': 'status-badge status-failed'
+    };
+    return statusClasses[status] || 'status-badge';
   };
 
+  if (loading) {
+    return (
+      <div className="dashboard-container">
+        <div className="premium-loading-content">
+          <div className="logo-animation">
+            <Logo size="medium" />
+          </div>
+          <div className="loading-text">
+            <h3>Loading Your Dashboard</h3>
+            <p>Fetching your creative history...</p>
+          </div>
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div className="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h2>Your Dashboard</h2>
-        <div className="dashboard-actions">
-          <CreditsDisplay userId={userId} />
-          <button 
-            onClick={handlePurchaseClick}
-            className="purchase-credits-btn"
-          >
-            Buy More Credits
-          </button>
+    <div className="dashboard-container">
+      {/* Credits Section */}
+      <div className="credits-section">
+        <CreditsDisplay userId={userId} />
+        <button 
+          onClick={() => setShowPurchaseModal(true)}
+          className="purchase-credits-btn"
+        >
+          Buy More Credits
+        </button>
+      </div>
+
+      {/* Section Divider */}
+      <div className="section-divider"></div>
+
+      {/* Stats Cards - Right under credits */}
+      <div className="stats-cards">
+        <div className="stat-card total">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              📊
+            </div>
+            <div className="stat-info">
+              <h3>{ads.length}</h3>
+              <p>Total Ads Generated</p>
+            </div>
+          </div>
+        </div>
+        <div className="stat-card completed">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              ✅
+            </div>
+            <div className="stat-info">
+              <h3>{ads.filter(ad => ad.status === 'completed').length}</h3>
+              <p>Completed</p>
+            </div>
+          </div>
+        </div>
+        <div className="stat-card pending">
+          <div className="stat-card-content">
+            <div className="stat-icon">
+              ⏳
+            </div>
+            <div className="stat-info">
+              <h3>{ads.filter(ad => ad.status === 'pending').length}</h3>
+              <p>In Progress</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="dashboard-content">
-        <div className="ad-history-section">
-          <h3>Recent Ad Generations</h3>
-          
-          {loading ? (
-            <div className="loading-message">Loading your ad history...</div>
-          ) : error ? (
-            <div className="error-message">{error}</div>
-          ) : adHistory.length === 0 ? (
-            <div className="empty-state">
-              <p>No ads generated yet. Start creating your first ad!</p>
-            </div>
-          ) : (
-            <div className="ad-history-list">
-              {adHistory.map((ad) => (
-                <div key={ad.id} className="ad-history-item">
-                  <div className="ad-info">
-                    <div className="ad-description">
-                      <strong>Description:</strong> {ad.product_description}
-                    </div>
-                    <div className="ad-size">
-                      <strong>Size:</strong> {ad.product_size}
-                    </div>
-                    <div className="ad-date">
-                      <strong>Created:</strong> {formatDate(ad.created_at)}
-                    </div>
-                  </div>
-                  <div className={`ad-status ${getStatusColor(ad.status)}`}>
-                    {ad.status}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Section Divider */}
+      <div className="section-divider"></div>
+
+      {/* Search and Filters Section */}
+      <div className="filters-section">
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search by email or status..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
+        <div className="filter-buttons">
+          <select 
+            value={statusFilter} 
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+          </select>
+
+          <select 
+            value={dateFilter} 
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">Last 7 Days</option>
+            <option value="month">Last Month</option>
+          </select>
         </div>
       </div>
+
+      {/* Section Divider */}
+      <div className="section-divider"></div>
+
+      {/* Your Ad History Section */}
+      <div className="dashboard-header">
+        <h2>Your Ad History</h2>
+        <button onClick={fetchAdHistory} className="refresh-btn">
+          Refresh
+        </button>
+      </div>
+
+      {error && (
+        <div className="error-banner">
+          {error}
+        </div>
+      )}
+
+      {filteredAds.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <h3>No ads found</h3>
+          <p>
+            {ads.length === 0 
+              ? "You haven't generated any ads yet. Start creating!" 
+              : "Try adjusting your filters."}
+          </p>
+        </div>
+      ) : (
+        <div className="ads-grid">
+          {filteredAds.map((ad) => (
+            <div key={ad.id} className="ad-card">
+              <div className="ad-card-header">
+                <span className={getStatusBadge(ad.status)}>
+                  {ad.status || 'pending'}
+                </span>
+                <span className="ad-date">
+                  {formatDate(ad.created_at)}
+                </span>
+              </div>
+
+              <div className="ad-images">
+                {ad.product_image_url && (
+                  <div className="ad-image-container">
+                    <img 
+                      src={ad.product_image_url} 
+                      alt="Product" 
+                      className="ad-thumbnail"
+                    />
+                    <span className="image-label">Product</span>
+                  </div>
+                )}
+                {ad.inspiration_image_url && (
+                  <div className="ad-image-container">
+                    <img 
+                      src={ad.inspiration_image_url} 
+                      alt="Inspiration" 
+                      className="ad-thumbnail"
+                    />
+                    <span className="image-label">Inspiration</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="ad-info">
+                <p><strong>Sent to:</strong> {ad.email_sent_to || 'N/A'}</p>
+                {ad.generated_ad_urls && ad.generated_ad_urls.length > 0 && (
+                  <div className="generated-ads-preview">
+                    <p><strong>Generated Ads:</strong></p>
+                    <div className="generated-thumbnails">
+                      {ad.generated_ad_urls.slice(0, 3).map((url, index) => (
+                        <img 
+                          key={index}
+                          src={url} 
+                          alt={`Generated ${index + 1}`} 
+                          className="generated-thumbnail"
+                        />
+                      ))}
+                      {ad.generated_ad_urls.length > 3 && (
+                        <span className="more-count">
+                          +{ad.generated_ad_urls.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {ad.status === 'completed' && ad.generated_ad_urls && (
+                <button className="view-results-btn">
+                  View Results
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {showPurchaseModal && (
         <PurchaseCredits
@@ -127,6 +329,6 @@ const Dashboard = ({ userId, showPurchaseModal, setShowPurchaseModal }) => {
       )}
     </div>
   );
-};
+}
 
 export default Dashboard;
