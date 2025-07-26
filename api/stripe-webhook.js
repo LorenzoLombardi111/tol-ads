@@ -1,17 +1,29 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { createClient } = require('@supabase/supabase-js');
 
+// Helper function to get raw body
+function getRawBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = '';
+    req.on('data', chunk => {
+      data += chunk;
+    });
+    req.on('end', () => {
+      resolve(Buffer.from(data, 'utf8'));
+    });
+    req.on('error', reject);
+  });
+}
+
 const supabase = createClient(
   process.env.REACT_APP_SUPABASE_URL || process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// Important: Configure body parsing for webhooks
+// Important: Disable body parsing for webhooks to get raw body
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
+    bodyParser: false,
   },
 };
 
@@ -30,10 +42,10 @@ export default async function handler(req, res) {
   let event;
 
   try {
-    // Construct the Stripe event from the webhook payload
-    const body = req.body;
+    // Get the raw body for signature verification
+    const rawBody = await getRawBody(req);
     event = stripe.webhooks.constructEvent(
-      body, 
+      rawBody, 
       sig, 
       process.env.STRIPE_WEBHOOK_SECRET
     );
