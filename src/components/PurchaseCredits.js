@@ -24,7 +24,17 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         .order('sort_order', { ascending: true });
 
       if (error) throw error;
-      setPlans(data || []);
+      
+      // Deduplicate plans by name to handle any database duplicates
+      const uniquePlans = data ? data.reduce((acc, plan) => {
+        const existingPlan = acc.find(p => p.name === plan.name);
+        if (!existingPlan) {
+          acc.push(plan);
+        }
+        return acc;
+      }, []) : [];
+      
+      setPlans(uniquePlans);
     } catch (err) {
       console.error('Error fetching plans:', err);
       setError('Failed to load payment plans. Please refresh the page.');
@@ -37,7 +47,12 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
     setError('');
     
     try {
-      const response = await fetch('/api/create-checkout-session', {
+      // Use the correct API endpoint for production
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? '/api/create-checkout-session'
+        : 'http://localhost:3000/api/create-checkout-session';
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +66,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
       const responseData = await response.json();
 
       if (!response.ok) {
-        throw new Error(responseData.error || 'Failed to create checkout session');
+        throw new Error(responseData.error || `HTTP ${response.status}: Failed to create checkout session`);
       }
 
       if (!responseData.sessionId) {

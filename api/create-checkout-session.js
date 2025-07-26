@@ -22,8 +22,11 @@ export default async function handler(req, res) {
   try {
     const { planId, userId } = req.body;
 
+    console.log('Creating checkout session for:', { planId, userId });
+
     // Validate required fields
     if (!planId || !userId) {
+      console.error('Missing required fields:', { planId, userId });
       return res.status(400).json({ error: 'Missing planId or userId' });
     }
 
@@ -45,6 +48,8 @@ export default async function handler(req, res) {
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
+    console.log('Fetching plan with ID:', planId);
+
     const { data: plan, error: planError } = await supabase
       .from('payment_plans')
       .select('*')
@@ -56,6 +61,8 @@ export default async function handler(req, res) {
       console.error('Plan not found:', planError);
       return res.status(404).json({ error: 'Plan not found or inactive' });
     }
+
+    console.log('Found plan:', plan.name, plan.credits_included, 'credits');
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
@@ -83,6 +90,7 @@ export default async function handler(req, res) {
       },
     });
 
+    console.log('Checkout session created successfully:', session.id);
     res.status(200).json({ sessionId: session.id });
   } catch (error) {
     console.error('Checkout session error:', error);
