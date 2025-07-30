@@ -2,6 +2,7 @@ import React from 'react';
 import Logo from '../Logo';
 import './LandingPage.css';
 
+// Force Vercel deployment - Footer links removed
 const LandingPage = () => {
   return (
     <div className="landing-page">
@@ -169,4 +170,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage; // Force deployment
+export default LandingPage; 
