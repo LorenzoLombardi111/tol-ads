@@ -662,7 +662,7 @@ function DashboardApp({ userData, onLogout }) {
                 disabled={loading || !productImage || !inspirationImage || !userEmail || !productDescription.trim() || !productSize.trim()}
                 className="generate-btn"
               >
-                {loading ? 'Generating...' : 'Generate Ads'}
+                {loading ? 'Generating...' : '1 💎 Generate Ads'}
               </button>
             </>
           ) : (
