@@ -394,8 +394,10 @@ function DashboardApp({ userData, onLogout }) {
       if (dbError) throw dbError;
 
       // Send to n8n webhook with the record ID
-      // TEMPORARILY COMMENTED OUT - Add REACT_APP_N8N_WEBHOOK_URL to Vercel environment variables
-      /*
+      if (!process.env.REACT_APP_N8N_WEBHOOK_URL) {
+        throw new Error('N8N webhook URL not configured. Please add REACT_APP_N8N_WEBHOOK_URL to environment variables.');
+      }
+
       const response = await axios.post(process.env.REACT_APP_N8N_WEBHOOK_URL, {
         productImage: productImage,
         inspirationImage: inspirationImage,
@@ -411,7 +413,6 @@ function DashboardApp({ userData, onLogout }) {
         },
         timeout: 30000
       });
-      */
 
       // Success!
       setSubmitted(true);
