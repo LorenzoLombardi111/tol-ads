@@ -40,11 +40,15 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
   };
 
   const handlePurchase = async (plan) => {
+    console.log('🔍 Starting purchase for plan:', plan);
     setLoading(true);
     setSelectedPlan(plan.id);
     setError('');
     
     try {
+      console.log('🔍 Making API call to /api/create-checkout-session');
+      console.log('🔍 Request body:', { planId: plan.id, userId: userId });
+      
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -56,7 +60,11 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         }),
       });
 
+      console.log('🔍 Response status:', response.status);
+      console.log('🔍 Response headers:', response.headers);
+
       const data = await response.json();
+      console.log('🔍 Response data:', data);
 
       if (!response.ok) {
         throw new Error(data.error || `HTTP ${response.status}: Request failed`);
@@ -66,11 +74,13 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         throw new Error('No session ID received');
       }
       
+      console.log('🔍 Loading Stripe with key:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
       const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
       if (!stripe) {
         throw new Error('Stripe failed to load');
       }
 
+      console.log('🔍 Redirecting to Stripe checkout with sessionId:', data.sessionId);
       const { error: stripeError } = await stripe.redirectToCheckout({
         sessionId: data.sessionId,
       });
@@ -79,7 +89,7 @@ const PurchaseCredits = ({ userId, onPurchaseSuccess, onClose }) => {
         throw stripeError;
       }
     } catch (err) {
-      console.error('Purchase error:', err);
+      console.error('❌ Purchase error:', err);
       setError(err.message || 'Purchase failed. Please try again.');
     } finally {
       setLoading(false);
