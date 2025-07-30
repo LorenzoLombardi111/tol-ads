@@ -159,26 +159,6 @@ const LandingPage = () => {
               <Logo size="small" showText={true} />
               <p>AI-powered ad generation that converts</p>
             </div>
-            <div className="footer-links">
-              <div className="footer-column">
-                <h4>Product</h4>
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#how-it-works">How it Works</a>
-              </div>
-              <div className="footer-column">
-                <h4>Company</h4>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-                <a href="#blog">Blog</a>
-              </div>
-              <div className="footer-column">
-                <h4>Support</h4>
-                <a href="#help">Help Center</a>
-                <a href="#privacy">Privacy</a>
-                <a href="#terms">Terms</a>
-              </div>
-            </div>
           </div>
           <div className="footer-bottom">
             <p>&copy; 2024 TOLcreatives. All rights reserved.</p>
