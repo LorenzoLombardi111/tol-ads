@@ -398,25 +398,32 @@ function DashboardApp({ userData, onLogout }) {
         throw new Error('N8N webhook URL not configured. Please add REACT_APP_N8N_WEBHOOK_URL to environment variables.');
       }
 
-      const response = await axios.post(process.env.REACT_APP_N8N_WEBHOOK_URL, {
-        productImage: productImage,
-        inspirationImage: inspirationImage,
-        productDescription: productDescription,
-        productSize: productSize,
-        userEmail: userEmail,
-        userId: userData.id,
-        userName: userData.name,
-        recordId: adRecord.id // Send this to n8n so it can update the record later
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        timeout: 30000
-      });
+      try {
+        const response = await axios.post(process.env.REACT_APP_N8N_WEBHOOK_URL, {
+          productImage: productImage,
+          inspirationImage: inspirationImage,
+          productDescription: productDescription,
+          productSize: productSize,
+          userEmail: userEmail,
+          userId: userData.id,
+          userName: userData.name,
+          recordId: adRecord.id // Send this to n8n so it can update the record later
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 30000
+        });
 
-      // Success!
-      setSubmitted(true);
-      setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes. 1 credit deducted.`);
+        // Success!
+        setSubmitted(true);
+        setSuccess(`Success! We got your images. Check your email (${userEmail}) in 5 minutes. 1 credit deducted.`);
+      } catch (webhookError) {
+        console.error('Webhook error:', webhookError);
+        // Even if webhook fails, the ad is saved to database
+        setSubmitted(true);
+        setSuccess(`Success! Your ad request has been saved. We'll process it shortly. Check your email (${userEmail}) in 5 minutes. 1 credit deducted.`);
+      }
       
     } catch (error) {
       console.error('Error:', error);
