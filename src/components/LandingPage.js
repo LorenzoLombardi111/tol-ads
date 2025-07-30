@@ -38,6 +38,8 @@ const LandingPage = () => {
             <p className="hero-subtitle">
               Transform your product images into winning ads that outperform your competition. 
               Get professional, conversion-focused ads delivered to your email in minutes.
+              <br />
+              <strong>🚀 NEW: Footer links removed for cleaner design!</strong>
             </p>
             <div className="hero-cta">
               <a href="/signup" className="cta-primary">
